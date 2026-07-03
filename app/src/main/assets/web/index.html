@@ -402,6 +402,20 @@
   .library-actions .btn{padding:10px 14px;font-size:12px;}
   @media(max-width:380px){.daily-calendar{gap:4px}.home-tool-grid{grid-template-columns:1fr}.reward-preview-grid{grid-template-columns:1fr 1fr}.daily-streak-orb{width:64px;height:64px}}
 
+
+
+  /* ===== Afaq Arabic Library Inline Reader/Player ===== */
+  .afaq-viewer-overlay{position:fixed;inset:0;background:rgba(20,27,24,.82);z-index:200;display:none;align-items:stretch;justify-content:center;padding:12px;}
+  .afaq-viewer-overlay.show{display:flex;}
+  .afaq-viewer-panel{width:100%;max-width:480px;background:var(--surface);border:1px solid var(--border);border-radius:24px;overflow:hidden;box-shadow:0 22px 60px -18px rgba(0,0,0,.6);display:flex;flex-direction:column;}
+  .afaq-viewer-head{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--bg);}
+  .afaq-viewer-title{flex:1;font-weight:800;font-size:13px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .afaq-viewer-close{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text-primary);font-weight:900;cursor:pointer;}
+  .afaq-viewer-frame{width:100%;height:calc(100vh - 110px);border:0;background:#fff;}
+  .library-lang-line{display:flex;align-items:center;gap:7px;margin:8px 0 6px;color:var(--primary);font-size:12px;font-weight:800;}
+  .library-card.arabic-priority{border-right:4px solid var(--accent);}
+  html[lang="en"] .library-card.arabic-priority{border-right:1px solid var(--border);border-left:4px solid var(--accent);}
+
 </style>
 </head>
 <body>
@@ -2421,19 +2435,17 @@ function renderAchievements(){
 const AFAQ_DAILY_KEYS = { VISITS:P+'daily_visits_v2', VISIT_XP:P+'daily_visit_xp_v2' };
 const AFAQ_LIBRARY = {
   books: [
-    {title:'How to Live on 24 Hours a Day', author:'Arnold Bennett', cat:'Time Management', source:'Project Gutenberg', url:'https://www.gutenberg.org/ebooks/2274', arTitle:'كيف تعيش على 24 ساعة في اليوم', arCat:'إدارة الوقت', arDesc:'كتاب كلاسيكي قصير عن استثمار الوقت اليومي وبناء حياة أعمق.'},
-    {title:'Self Help', author:'Samuel Smiles', cat:'Self Development', source:'Project Gutenberg', url:'https://www.gutenberg.org/ebooks/935', arTitle:'المساعدة الذاتية', arCat:'تطوير الذات', arDesc:'من أوائل كتب تطوير الذات عن المثابرة والاعتماد على النفس.'},
-    {title:'As a Man Thinketh', author:'James Allen', cat:'Mindset', source:'LibriVox / Public Domain', url:'https://librivox.org/as-a-man-thinketh-by-james-allen/', arTitle:'كما يفكر الإنسان', arCat:'العقلية', arDesc:'كتاب ملهم عن أثر الأفكار على الشخصية والإنجاز.'},
-    {title:'The Power of Concentration', author:'Theron Q. Dumont', cat:'Focus', source:'Project Gutenberg', url:'https://www.gutenberg.org/ebooks/1570', arTitle:'قوة التركيز', arCat:'التركيز', arDesc:'دروس عملية لتنمية الانتباه والتركيز الذهني.'},
-    {title:'The Majesty of Calmness', author:'William George Jordan', cat:'Calmness', source:'Project Gutenberg', url:'https://www.gutenberg.org/ebooks/6911', arTitle:'جلال الهدوء', arCat:'الهدوء', arDesc:'مقالات قصيرة عن الهدوء وضبط النفس وبناء الشخصية.'},
-    {title:'Autobiography of Benjamin Franklin', author:'Benjamin Franklin', cat:'Success / Discipline', source:'Project Gutenberg', url:'https://www.gutenberg.org/ebooks/20203', arTitle:'السيرة الذاتية لبنجامين فرانكلين', arCat:'النجاح والانضباط', arDesc:'تجربة شخصية ملهمة في الانضباط وتكوين العادات والفضائل.'},
-    {title:'The Art of War', author:'Sun Tzu', cat:'Strategy', source:'Project Gutenberg', url:'https://www.gutenberg.org/ebooks/132', arTitle:'فن الحرب', arCat:'الاستراتيجية', arDesc:'كلاسيكية عالمية في التخطيط والاستراتيجية واتخاذ القرار.'}
+    {title:'العقل الباطن', author:'سلامة موسى', language:'العربية', cat:'علم النفس وتطوير الذات', source:'صفحات / هنداوي', url:'https://www.safahat.org/books/82064868/1/', embedUrl:'https://www.safahat.org/books/82064868/1/', desc:'كتاب عربي مبسط عن فهم النفس والعقل الباطن وكيف تؤثر العادات والخواطر في السلوك.'},
+    {title:'طبائع الاستبداد ومصارع الاستعباد', author:'عبد الرحمن الكواكبي', language:'العربية', cat:'الوعي والحرية وبناء الشخصية', source:'صفحات / هنداوي', url:'https://www.safahat.org/books/30272530/1/', embedUrl:'https://www.safahat.org/books/30272530/1/', desc:'كتاب كلاسيكي عربي في الوعي، الحرية، مقاومة الخضوع، وبناء عقلية مسؤولة.'},
+    {title:'أدب الدنيا والدين', author:'أبو الحسن الماوردي', language:'العربية', cat:'الأخلاق وإدارة الحياة', source:'Internet Archive', url:'https://archive.org/details/Adaba_aldiy_Waldunya', embedUrl:'https://archive.org/embed/Adaba_aldiy_Waldunya', desc:'كتاب تراثي مهم في الأخلاق، آداب النفس، العلم، وصلاح الحياة.'},
+    {title:'هكذا خُلقت', author:'محمد حسين هيكل', language:'العربية', cat:'الرواية والوعي الاجتماعي', source:'صفحات / هنداوي', url:'https://www.safahat.org/books/30272028/1/', embedUrl:'https://www.safahat.org/books/30272028/1/', desc:'رواية عربية تساعد القارئ على التأمل في السلوك، الاختيارات، والعلاقات الإنسانية.'},
+    {title:'جبران خليل جبران', author:'ميخائيل نعيمة', language:'العربية', cat:'السيرة والإلهام', source:'Arabic Collections Online', url:'https://aco.dlib.nyu.edu/ark:/48907/f3sq8x0p', embedUrl:'https://aco.dlib.nyu.edu/ark:/48907/f3sq8x0p', desc:'سيرة أدبية ملهمة عن جبران وأثر الفكر والكتابة في صناعة الإنسان.'},
+    {title:'مجموعة كتب عربية عامة', author:'Arabic Collections Online', language:'العربية', cat:'مكتبة عربية عامة', source:'ACO', url:'https://aco.dlib.nyu.edu/', embedUrl:'https://aco.dlib.nyu.edu/', desc:'بوابة لمكتبة عربية رقمية عامة تضم كتبًا عربية من الملكية العامة.'}
   ],
   audio: [
-    {title:'As a Man Thinketh', author:'James Allen', cat:'Mindset', source:'LibriVox', url:'https://librivox.org/as-a-man-thinketh-by-james-allen/', arTitle:'كما يفكر الإنسان', arCat:'العقلية', arDesc:'نسخة صوتية قصيرة ومناسبة للاستماع اليومي.'},
-    {title:'How to Live on Twenty-Four Hours a Day', author:'Arnold Bennett', cat:'Time Management', source:'LibriVox', url:'https://librivox.org/how-to-live-on-twenty-four-hours-a-day-by-arnold-bennett/', arTitle:'كيف تعيش على 24 ساعة في اليوم', arCat:'إدارة الوقت', arDesc:'كتاب صوتي عن إدارة اليوم واستثمار الوقت.'},
-    {title:'Self Help', author:'Samuel Smiles', cat:'Self Development', source:'LibriVox', url:'https://librivox.org/self-help-by-samuel-smiles/', arTitle:'المساعدة الذاتية', arCat:'تطوير الذات', arDesc:'كتاب صوتي طويل عن المثابرة والفرص وبناء النجاح.'},
-    {title:'The Art of War', author:'Sun Tzu', cat:'Strategy', source:'LibriVox', url:'https://librivox.org/the-art-of-war-by-sun-tzu', arTitle:'فن الحرب', arCat:'الاستراتيجية', arDesc:'كتاب صوتي في التخطيط والتفكير الاستراتيجي.'}
+    {title:'طبائع الاستبداد ومصارع الاستعباد', author:'عبد الرحمن الكواكبي', language:'العربية', cat:'كتاب صوتي عربي', source:'LibriVox / Internet Archive', url:'https://archive.org/details/tabai_al-istibdad_wa-masari_al-istibad_1903_librivox', embedUrl:'https://archive.org/embed/tabai_al-istibdad_wa-masari_al-istibad_1903_librivox', desc:'تسجيل عربي كامل من LibriVox لكتاب طبائع الاستبداد ومصارع الاستعباد.'},
+    {title:'أدب الدنيا والدين', author:'أبو الحسن الماوردي', language:'العربية', cat:'كتاب صوتي عربي', source:'LibriVox / Internet Archive', url:'https://archive.org/details/kitab_adab_dunya_1107_librivox', embedUrl:'https://archive.org/embed/kitab_adab_dunya_1107_librivox', desc:'تسجيل عربي كامل لكتاب أدب الدنيا والدين، مناسب للأخلاق وإدارة الحياة.'},
+    {title:'تصفح كتب صوتية عربية عامة', author:'LibriVox', language:'العربية', cat:'مكتبة صوتية عامة', source:'LibriVox', url:'https://librivox.org/search?language=Arabic&action=Search', embedUrl:'https://librivox.org/search?language=Arabic&action=Search', desc:'صفحة بحث الكتب الصوتية العربية في LibriVox لاستكشاف تسجيلات عربية مجانية.'}
   ]
 };
 const AFAQ_BADGES = {
@@ -2506,21 +2518,45 @@ function renderAfaqDailyDashboard(){
   const cal=Array.from({length:30},(_,idx)=>{ const off=29-idx, key=dateKeyOffset(off), done=!!visits[key], today=off===0; return `<div class="daily-day ${done?'done':''} ${today?'today':''}" title="${key}">${done?'':new Date(key).getDate()}</div>`; }).join('');
   const unlocked=AFAQ_BADGES[lang].filter(b=>b.check(snap));
   const preview=AFAQ_BADGES[lang].slice(0,6).map(b=>`<div class="reward-mini ${b.check(snap)?'unlocked':''}">${ic(b.icon,'icon-sm')}<div class="r-title">${b.title}</div><div class="r-desc">${b.desc}</div></div>`).join('');
-  const labels={ar:{daily:'لوحة حضورك اليومية',days:'أيام متتالية',longest:'أطول سلسلة',title:'لقبك الحالي',next:'الجائزة القادمة',tools:'أدواتك اليومية',focus:'مؤقت التركيز',water:'شرب الماء',breath:'تنفس وهدوء',library:'مكتبة آفاق',focusSub:'جلسة تركيز قصيرة',waterSub:'تابع أكواب اليوم',breathSub:'دقيقة تعيد الاتزان',librarySub:'كتب وكتب صوتية'},en:{daily:'Your daily check-in board',days:'day streak',longest:'Longest streak',title:'Current title',next:'Next reward',tools:'Your Daily Tools',focus:'Focus Timer',water:'Water',breath:'Breathing',library:'Afaq Library',focusSub:'Start a short focus session',waterSub:'Track today’s cups',breathSub:'One minute to reset',librarySub:'Books and audiobooks'}}[lang];
+  const labels={ar:{daily:'لوحة حضورك اليومية',days:'أيام متتالية',longest:'أطول سلسلة',title:'لقبك الحالي',next:'الجائزة القادمة',tools:'أدواتك اليومية',focus:'مؤقت التركيز',water:'شرب الماء',breath:'تنفس وهدوء',library:'مكتبة آفاق العربية',focusSub:'جلسة تركيز قصيرة',waterSub:'تابع أكواب اليوم',breathSub:'دقيقة تعيد الاتزان',librarySub:'كتب وصوتيات عربية'},en:{daily:'Your daily check-in board',days:'day streak',longest:'Longest streak',title:'Current title',next:'Next reward',tools:'Your Daily Tools',focus:'Focus Timer',water:'Water',breath:'Breathing',library:'Arabic Afaq Library',focusSub:'Start a short focus session',waterSub:'Track today’s cups',breathSub:'One minute to reset',librarySub:'Arabic books and audio'}}[lang];
   const html=`<div id="afaqHomeUpgrade"><div id="afaqDailyDashboard" class="daily-dashboard-card"><div class="daily-dashboard-head"><div class="daily-streak-orb"><div class="num">${snap.streak}</div><div class="txt">${labels.days}</div></div><div class="daily-dashboard-copy"><h3>${labels.daily}</h3><p>${afaqMotivation(lang,snap.streak)}</p><span class="daily-title-pill">${ic('medal','icon-sm')} ${labels.title}: ${title}</span></div></div><div class="daily-calendar">${cal}</div><div class="daily-progress-row"><span class="muted">${labels.longest}: ${snap.longest}</span><span class="muted">${unlocked.length}/${AFAQ_BADGES[lang].length}</span></div><div class="next-reward-box"><div class="daily-progress-row"><b style="font-size:13px">${labels.next}</b><span class="muted">${Math.round(next.pct)}%</span></div><p class="muted" style="margin:6px 0 8px">${next.label}</p><div class="progress-track"><div class="progress-fill" style="width:${next.pct}%"></div></div></div><div class="reward-preview-grid">${preview}</div></div><div class="section-heading">${labels.tools}</div><div id="afaqHomeTools" class="home-tool-grid"><div class="home-tool-card" onclick="go('pomodoro')"><div class="tool-bubble">${ic('stopwatch')}</div><div><h4>${labels.focus}</h4><p>${labels.focusSub}</p></div></div><div class="home-tool-card" onclick="go('water')"><div class="tool-bubble">${ic('droplet')}</div><div><h4>${labels.water}</h4><p>${labels.waterSub}</p></div></div><div class="home-tool-card" onclick="go('breathing')"><div class="tool-bubble">${ic('bubbles')}</div><div><h4>${labels.breath}</h4><p>${labels.breathSub}</p></div></div><div class="home-tool-card" onclick="go('library')"><div class="tool-bubble">${ic('book-open')}</div><div><h4>${labels.library}</h4><p>${labels.librarySub}</p></div></div></div></div>`;
   const hero=document.querySelector('#screen-home .hero-panel'); if(!hero) return;
   const old=document.getElementById('afaqHomeUpgrade'); if(old) old.outerHTML=html; else hero.insertAdjacentHTML('afterend',html);
 }
 const afaqOriginalRenderHome = renderHome;
 renderHome = function(){ afaqOriginalRenderHome(); renderAfaqDailyDashboard(); };
-function afaqOpenExternal(url){ window.location.href=url; }
+function afaqEnsureViewer(){
+  let overlay=document.getElementById('afaqViewerOverlay');
+  if(overlay) return overlay;
+  overlay=document.createElement('div');
+  overlay.id='afaqViewerOverlay';
+  overlay.className='afaq-viewer-overlay';
+  overlay.innerHTML=`<div class="afaq-viewer-panel"><div class="afaq-viewer-head"><div class="afaq-viewer-title" id="afaqViewerTitle">مكتبة آفاق</div><button class="afaq-viewer-close" onclick="afaqCloseViewer()">×</button></div><iframe id="afaqViewerFrame" class="afaq-viewer-frame" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe></div>`;
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click',e=>{ if(e.target===overlay) afaqCloseViewer(); });
+  return overlay;
+}
+function afaqOpenViewer(url, title){
+  const overlay=afaqEnsureViewer();
+  document.getElementById('afaqViewerTitle').textContent=title||'مكتبة آفاق';
+  document.getElementById('afaqViewerFrame').src=url;
+  overlay.classList.add('show');
+}
+function afaqCloseViewer(){
+  const overlay=document.getElementById('afaqViewerOverlay');
+  if(!overlay) return;
+  const frame=document.getElementById('afaqViewerFrame');
+  if(frame) frame.src='about:blank';
+  overlay.classList.remove('show');
+}
+function afaqOpenExternal(url){ afaqOpenViewer(url,'مكتبة آفاق'); }
 function renderLibrary(type){
   type=type||'books'; const lang=currentLang(); setData(P+'library_opened',true);
-  const t={ar:{title:'مكتبة آفاق',sub:'كتب وكتب صوتية مختارة لتطوير الذات، إدارة الوقت، التركيز، والنجاح.',note:'جميع الكتب هنا من مصادر مجانية وقانونية أو من الملكية العامة، وتفتح من مصدرها الرسمي.',books:'كتب للقراءة',audio:'كتب صوتية',read:'قراءة',listen:'استماع',source:'المصدر'},en:{title:'Afaq Library',sub:'Selected books and audiobooks for self-development, time management, focus, and success.',note:'All books here are from free legal/public-domain sources and open from their official source.',books:'Books',audio:'Audiobooks',read:'Read',listen:'Listen',source:'Source'}}[lang];
+  const t={ar:{title:'مكتبة آفاق العربية',sub:'كتب عربية وكتب صوتية عربية مختارة لتطوير الذات، الوعي، إدارة الحياة، والنجاح.',note:'الكتب تفتح داخل التطبيق مباشرة. تم اختيار مصادر مجانية وقانونية أو من الملكية العامة، مع عرض لغة الكتاب تحت كل عنوان.',books:'كتب عربية للقراءة',audio:'كتب صوتية عربية',read:'افتح الكتاب',listen:'تشغيل مباشر',source:'المصدر',language:'لغة الكتاب'},en:{title:'Arabic Afaq Library',sub:'Arabic books and Arabic audiobooks for self-development, awareness, life management, and success.',note:'Books open directly inside the app. Sources are free/legal or public-domain, and the book language is shown under each title.',books:'Arabic Books',audio:'Arabic Audiobooks',read:'Open Book',listen:'Play Inside App',source:'Source',language:'Language'}}[lang];
   const byId={libraryTitle:t.title,librarySub:t.sub,libraryLegalNote:t.note,libraryBooksTab:t.books,libraryAudioTab:t.audio}; Object.keys(byId).forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=byId[id]; });
   document.getElementById('libraryBooksTab')?.classList.toggle('active',type==='books'); document.getElementById('libraryAudioTab')?.classList.toggle('active',type==='audio');
   const list=AFAQ_LIBRARY[type];
-  const html=list.map(b=>`<div class="library-card"><h3>${ic(type==='audio'?'bubbles':'book-open','icon-sm')} ${lang==='ar'?b.arTitle:b.title}</h3><p>${lang==='ar'?b.arDesc:`${b.author} • ${b.cat}`}</p><div class="meta"><span class="library-pill">${lang==='ar'?b.arCat:b.cat}</span><span class="library-pill">${t.source}: ${b.source}</span><span class="library-pill">${b.author}</span></div><div class="library-actions"><button class="btn btn-primary" onclick="afaqOpenExternal('${b.url}')">${type==='audio'?t.listen:t.read}</button></div></div>`).join('');
+  const html=list.map((b)=>`<div class="library-card arabic-priority"><h3>${ic(type==='audio'?'bubbles':'book-open','icon-sm')} ${b.title}</h3><div class="library-lang-line">${ic('flag','icon-sm')} ${t.language}: ${b.language}</div><p>${b.desc}</p><div class="meta"><span class="library-pill">${b.cat}</span><span class="library-pill">${t.source}: ${b.source}</span><span class="library-pill">${b.author}</span></div><div class="library-actions"><button class="btn btn-primary" onclick="afaqOpenViewer('${b.embedUrl||b.url}','${String(b.title).replace(/'/g,"\'")}')">${type==='audio'?t.listen:t.read}</button></div></div>`).join('');
   document.getElementById('libraryList').innerHTML=html;
 }
 const afaqOriginalGo = go;
