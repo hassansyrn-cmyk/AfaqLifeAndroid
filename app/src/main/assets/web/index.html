@@ -357,6 +357,51 @@
   }
 
   ::selection{ background:var(--accent-soft); }
+
+
+  /* ===== Afaq v1.1 Daily Home, Rewards, Library Upgrade ===== */
+  .daily-dashboard-card{background:linear-gradient(160deg,var(--surface),color-mix(in srgb,var(--accent-soft) 55%,var(--surface)));border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:16px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .daily-dashboard-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .daily-streak-orb{width:72px;height:72px;border-radius:24px;background:var(--primary-grad);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 16px 32px -16px rgba(74,103,96,.8);flex-shrink:0;}
+  .daily-streak-orb .num{font-family:'Cairo',sans-serif;font-size:25px;font-weight:800;line-height:1;}
+  .daily-streak-orb .txt{font-size:10px;opacity:.82;margin-top:3px;}
+  .daily-dashboard-copy{flex:1;min-width:0;}
+  .daily-dashboard-copy h3{margin:0 0 5px;font-size:17px;display:block;}
+  .daily-dashboard-copy p{font-size:13px;color:var(--text-secondary);line-height:1.55;margin:0;}
+  .daily-title-pill{display:inline-flex;align-items:center;gap:6px;background:var(--gold-grad);color:#3A2A16;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:800;margin-top:8px;}
+  .daily-calendar{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:14px 0 10px;direction:ltr;}
+  .daily-day{aspect-ratio:1;border-radius:9px;border:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text-secondary);font-weight:800;position:relative;}
+  .daily-day.done{background:var(--primary-grad);color:#fff;border-color:var(--primary);}
+  .daily-day.today{outline:2px solid var(--accent);outline-offset:1px;}
+  .daily-day.done::after{content:'✓';font-size:12px;}
+  .daily-progress-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;}
+  .daily-progress-row .muted{font-size:12px;}
+  .next-reward-box{background:rgba(255,255,255,.35);border:1px solid var(--border);border-radius:16px;padding:12px;margin-top:12px;}
+  [data-theme="dark"] .next-reward-box{background:rgba(255,255,255,.04);}
+  .reward-preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;}
+  .reward-mini{border:1px solid var(--border);background:var(--surface);border-radius:14px;padding:10px 6px;text-align:center;min-height:72px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;}
+  .reward-mini.unlocked{border-color:var(--accent);background:linear-gradient(160deg,var(--surface),var(--accent-soft));}
+  .reward-mini .r-title{font-size:11px;font-weight:800;line-height:1.3;}
+  .reward-mini .r-desc{font-size:9.5px;color:var(--text-secondary);line-height:1.2;}
+  .home-tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+  .home-tool-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:15px;box-shadow:var(--shadow-soft);cursor:pointer;display:flex;align-items:center;gap:11px;min-height:78px;}
+  .home-tool-card:active{transform:scale(.98);}
+  .home-tool-card .tool-bubble{width:42px;height:42px;border-radius:15px;background:var(--accent-soft);color:var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .home-tool-card h4{margin:0 0 2px;font-size:13.5px;}
+  .home-tool-card p{margin:0;font-size:11px;color:var(--text-secondary);line-height:1.35;}
+  .library-tabs{display:flex;gap:8px;margin-bottom:14px;}
+  .library-tabs .btn-chip{flex:1;text-align:center;justify-content:center;display:flex;}
+  .library-note{background:var(--accent-soft);border:1px solid var(--accent);border-radius:16px;padding:12px 14px;color:var(--text-primary);font-size:13px;line-height:1.65;margin-bottom:14px;}
+  .library-grid{display:grid;grid-template-columns:1fr;gap:10px;}
+  .library-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:16px;box-shadow:var(--shadow-soft);}
+  .library-card h3{margin:0 0 6px;font-size:15px;display:flex;align-items:center;gap:8px;}
+  .library-card .meta{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;}
+  .library-pill{font-size:10.5px;border-radius:999px;padding:5px 9px;background:var(--bg);border:1px solid var(--border);color:var(--text-secondary);font-weight:700;}
+  .library-card p{font-size:13px;color:var(--text-secondary);line-height:1.65;margin-bottom:10px;}
+  .library-actions{display:flex;gap:8px;flex-wrap:wrap;}
+  .library-actions .btn{padding:10px 14px;font-size:12px;}
+  @media(max-width:380px){.daily-calendar{gap:4px}.home-tool-grid{grid-template-columns:1fr}.reward-preview-grid{grid-template-columns:1fr 1fr}.daily-streak-orb{width:64px;height:64px}}
+
 </style>
 </head>
 <body>
@@ -489,6 +534,8 @@
     <div class="tool-row" onclick="go('weekly')"><div class="tool-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#i-calendar"></use></svg></div><div class="tool-text"><h4 data-i18n="weekly_review">المراجعة الأسبوعية</h4><span data-i18n="weekly_review_sub">وقفة أسبوعية مع نفسك</span></div><div class="chev">‹</div></div>
     <div class="tool-row" onclick="go('reading')"><div class="tool-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#i-book-open"></use></svg></div><div class="tool-text"><h4 data-i18n="reading_list">قائمة القراءة</h4><span data-i18n="reading_list_sub">تابع كتب تطوير الذات</span></div><div class="chev">‹</div></div>
 
+
+    <div class="tool-row" onclick="go('library')"><div class="tool-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#i-book-open"></use></svg></div><div class="tool-text"><h4 id="toolLibraryTitle" data-i18n="afaq_library">مكتبة آفاق</h4><span id="toolLibrarySub" data-i18n="afaq_library_sub">كتب وكتب صوتية لتطوير الذات والنجاح</span></div><div class="chev">‹</div></div>  
     <div class="tool-row" onclick="go('onboarding')"><div class="tool-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#i-compass"></use></svg></div><div class="tool-text"><h4 data-i18n="experience_onboarding">تهيئة تجربتك</h4><span data-i18n="experience_onboarding_sub">اختر مجالاتك وأول هدف لك</span></div><div class="chev">‹</div></div>
     <div class="tool-row" onclick="go('habit-builder')"><div class="tool-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#i-list-check"></use></svg></div><div class="tool-text"><h4 data-i18n="custom_habit_builder">بناء عادة مخصصة</h4><span data-i18n="custom_habit_builder_sub">حلقة العادة: محفز، فعل، مكافأة</span></div><div class="chev">‹</div></div>
     <div class="tool-row" onclick="go('life-areas')"><div class="tool-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#i-target"></use></svg></div><div class="tool-text"><h4 data-i18n="life_areas">مجالات الحياة</h4><span data-i18n="life_areas_sub">تقييم شامل للمجالات الأساسية</span></div><div class="chev">‹</div></div>
@@ -808,6 +855,19 @@
     <div id="programDetails"></div>
   </div>
 
+
+  <!-- ===== AFAQ LIBRARY ===== -->
+  <div class="screen" id="screen-library">
+    <h1 class="hero-title" id="libraryTitle">مكتبة آفاق</h1>
+    <p class="hero-sub" id="librarySub">كتب وكتب صوتية مختارة لتطوير الذات، إدارة الوقت، التركيز، والنجاح.</p>
+    <div class="library-note" id="libraryLegalNote">جميع الكتب هنا من مصادر مجانية وقانونية أو من الملكية العامة، وتفتح من مصدرها الرسمي.</div>
+    <div class="library-tabs">
+      <button class="btn-chip active" id="libraryBooksTab" onclick="renderLibrary('books')">كتب للقراءة</button>
+      <button class="btn-chip" id="libraryAudioTab" onclick="renderLibrary('audio')">كتب صوتية</button>
+    </div>
+    <div class="library-grid" id="libraryList"></div>
+  </div>
+
   <!-- ===== STATS DASHBOARD ===== -->
   <div class="screen" id="screen-stats">
     <h1 class="hero-title" data-i18n="your_stats">إحصائياتك</h1>
@@ -882,7 +942,8 @@ const I18N_DICT = {
     daily_routine_sub: 'روتينك الصباحي والمسائي', daily_journal: 'المفكرة اليومية', daily_journal_sub: 'دوّن أفكارك وملاحظاتك',
     long_term_growth: 'النمو طويل المدى', my_goals: 'أهدافي', my_goals_sub: 'أهداف كبيرة مقسّمة لخطوات',
     weekly_review: 'المراجعة الأسبوعية', weekly_review_sub: 'وقفة أسبوعية مع نفسك', reading_list: 'قائمة القراءة',
-    reading_list_sub: 'تابع كتب تطوير الذات', experience_onboarding: 'تهيئة تجربتك', experience_onboarding_sub: 'اختر مجالاتك وأول هدف لك',
+    reading_list_sub: 'تابع كتب تطوير الذات',
+    afaq_library: 'مكتبة آفاق', afaq_library_sub: 'كتب وكتب صوتية لتطوير الذات والنجاح', experience_onboarding: 'تهيئة تجربتك', experience_onboarding_sub: 'اختر مجالاتك وأول هدف لك',
     custom_habit_builder: 'بناء عادة مخصصة', custom_habit_builder_sub: 'حلقة العادة: محفز، فعل، مكافأة', life_areas: 'مجالات الحياة',
     life_areas_sub: 'تقييم شامل للمجالات الأساسية', tips_library: 'مكتبة النصائح', tips_library_sub: '30+ نصيحة عملية حسب التصنيف',
     fourteen_day_programs: 'برامج 14 يوم', fourteen_day_programs_sub: 'مسارات مصغرة للعادات والتركيز', your_progress: 'تقدمك',
@@ -948,7 +1009,8 @@ const I18N_DICT = {
     daily_routine_sub: 'Your morning and evening routine', daily_journal: 'Daily Journal', daily_journal_sub: 'Write down your thoughts and notes',
     long_term_growth: 'Long-term Growth', my_goals: 'My Goals', my_goals_sub: 'Big goals divided into steps',
     weekly_review: 'Weekly Review', weekly_review_sub: 'A weekly pause with yourself', reading_list: 'Reading List',
-    reading_list_sub: 'Track self-development books', experience_onboarding: 'Setup Experience', experience_onboarding_sub: 'Choose your areas and first goal',
+    reading_list_sub: 'Track self-development books',
+    afaq_library: 'Afaq Library', afaq_library_sub: 'Books and audiobooks for growth and success', experience_onboarding: 'Setup Experience', experience_onboarding_sub: 'Choose your areas and first goal',
     custom_habit_builder: 'Custom Habit Builder', custom_habit_builder_sub: 'Habit loop: cue, routine, reward', life_areas: 'Life Areas',
     life_areas_sub: 'Comprehensive assessment of core areas', tips_library: 'Tips Library', tips_library_sub: '30+ practical tips by category',
     fourteen_day_programs: '14-Day Programs', fourteen_day_programs_sub: 'Mini tracks for habits and focus', your_progress: 'Your Progress',
@@ -2352,6 +2414,134 @@ function renderAchievements(){
     `;
   }).join('');
 }
+
+
+
+/* ===== Afaq v1.1 Home Dashboard + Library + Rewards Upgrade ===== */
+const AFAQ_DAILY_KEYS = { VISITS:P+'daily_visits_v2', VISIT_XP:P+'daily_visit_xp_v2' };
+const AFAQ_LIBRARY = {
+  books: [
+    {title:'How to Live on 24 Hours a Day', author:'Arnold Bennett', cat:'Time Management', source:'Project Gutenberg', url:'https://www.gutenberg.org/ebooks/2274', arTitle:'كيف تعيش على 24 ساعة في اليوم', arCat:'إدارة الوقت', arDesc:'كتاب كلاسيكي قصير عن استثمار الوقت اليومي وبناء حياة أعمق.'},
+    {title:'Self Help', author:'Samuel Smiles', cat:'Self Development', source:'Project Gutenberg', url:'https://www.gutenberg.org/ebooks/935', arTitle:'المساعدة الذاتية', arCat:'تطوير الذات', arDesc:'من أوائل كتب تطوير الذات عن المثابرة والاعتماد على النفس.'},
+    {title:'As a Man Thinketh', author:'James Allen', cat:'Mindset', source:'LibriVox / Public Domain', url:'https://librivox.org/as-a-man-thinketh-by-james-allen/', arTitle:'كما يفكر الإنسان', arCat:'العقلية', arDesc:'كتاب ملهم عن أثر الأفكار على الشخصية والإنجاز.'},
+    {title:'The Power of Concentration', author:'Theron Q. Dumont', cat:'Focus', source:'Project Gutenberg', url:'https://www.gutenberg.org/ebooks/1570', arTitle:'قوة التركيز', arCat:'التركيز', arDesc:'دروس عملية لتنمية الانتباه والتركيز الذهني.'},
+    {title:'The Majesty of Calmness', author:'William George Jordan', cat:'Calmness', source:'Project Gutenberg', url:'https://www.gutenberg.org/ebooks/6911', arTitle:'جلال الهدوء', arCat:'الهدوء', arDesc:'مقالات قصيرة عن الهدوء وضبط النفس وبناء الشخصية.'},
+    {title:'Autobiography of Benjamin Franklin', author:'Benjamin Franklin', cat:'Success / Discipline', source:'Project Gutenberg', url:'https://www.gutenberg.org/ebooks/20203', arTitle:'السيرة الذاتية لبنجامين فرانكلين', arCat:'النجاح والانضباط', arDesc:'تجربة شخصية ملهمة في الانضباط وتكوين العادات والفضائل.'},
+    {title:'The Art of War', author:'Sun Tzu', cat:'Strategy', source:'Project Gutenberg', url:'https://www.gutenberg.org/ebooks/132', arTitle:'فن الحرب', arCat:'الاستراتيجية', arDesc:'كلاسيكية عالمية في التخطيط والاستراتيجية واتخاذ القرار.'}
+  ],
+  audio: [
+    {title:'As a Man Thinketh', author:'James Allen', cat:'Mindset', source:'LibriVox', url:'https://librivox.org/as-a-man-thinketh-by-james-allen/', arTitle:'كما يفكر الإنسان', arCat:'العقلية', arDesc:'نسخة صوتية قصيرة ومناسبة للاستماع اليومي.'},
+    {title:'How to Live on Twenty-Four Hours a Day', author:'Arnold Bennett', cat:'Time Management', source:'LibriVox', url:'https://librivox.org/how-to-live-on-twenty-four-hours-a-day-by-arnold-bennett/', arTitle:'كيف تعيش على 24 ساعة في اليوم', arCat:'إدارة الوقت', arDesc:'كتاب صوتي عن إدارة اليوم واستثمار الوقت.'},
+    {title:'Self Help', author:'Samuel Smiles', cat:'Self Development', source:'LibriVox', url:'https://librivox.org/self-help-by-samuel-smiles/', arTitle:'المساعدة الذاتية', arCat:'تطوير الذات', arDesc:'كتاب صوتي طويل عن المثابرة والفرص وبناء النجاح.'},
+    {title:'The Art of War', author:'Sun Tzu', cat:'Strategy', source:'LibriVox', url:'https://librivox.org/the-art-of-war-by-sun-tzu', arTitle:'فن الحرب', arCat:'الاستراتيجية', arDesc:'كتاب صوتي في التخطيط والتفكير الاستراتيجي.'}
+  ]
+};
+const AFAQ_BADGES = {
+  ar: [
+    {id:'starter',title:'البداية المباركة',desc:'سجل أول حضور في آفاق',icon:'star',check:s=>s.xp>0},
+    {id:'streak3',title:'مستمر 3 أيام',desc:'3 أيام حضور متتالية',icon:'flame',check:s=>s.streak>=3},
+    {id:'week7',title:'أسبوع ذهبي',desc:'7 أيام متتالية من الالتزام',icon:'calendar',check:s=>s.streak>=7},
+    {id:'habitmaker',title:'صانع العادة',desc:'أنجز 10 علامات عادة',icon:'check-circle',check:s=>s.habitDone>=10},
+    {id:'focusmind',title:'عقل مركز',desc:'أكمل 3 جلسات تركيز',icon:'stopwatch',check:s=>s.focusMin>=45},
+    {id:'reader',title:'قارئ نشط',desc:'أضف كتابًا إلى قائمتك أو افتح المكتبة',icon:'book-open',check:s=>s.books>=1||s.libraryOpened},
+    {id:'calm',title:'باني الهدوء',desc:'سجل امتنانًا أو تأملًا 3 مرات',icon:'leaf',check:s=>s.entries>=3},
+    {id:'champ14',title:'بطل 14 يوم',desc:'14 يومًا من الحضور',icon:'medal',check:s=>s.streak>=14},
+    {id:'hero30',title:'بطل 30 يوم',desc:'30 يومًا من الاستمرار',icon:'trending',check:s=>s.streak>=30},
+    {id:'master',title:'سيّد آفاق',desc:'اجمع 800 نقطة',icon:'sparkle',check:s=>s.xp>=800}
+  ],
+  en: [
+    {id:'starter',title:'First Spark',desc:'Complete your first check-in',icon:'star',check:s=>s.xp>0},
+    {id:'streak3',title:'3-Day Streak',desc:'Show up for 3 days in a row',icon:'flame',check:s=>s.streak>=3},
+    {id:'week7',title:'Golden Week',desc:'7 consecutive days of commitment',icon:'calendar',check:s=>s.streak>=7},
+    {id:'habitmaker',title:'Habit Maker',desc:'Complete 10 habit marks',icon:'check-circle',check:s=>s.habitDone>=10},
+    {id:'focusmind',title:'Focus Mind',desc:'Complete 3 focus sessions',icon:'stopwatch',check:s=>s.focusMin>=45},
+    {id:'reader',title:'Active Reader',desc:'Add a book or open the library',icon:'book-open',check:s=>s.books>=1||s.libraryOpened},
+    {id:'calm',title:'Calm Builder',desc:'Write gratitude/reflection 3 times',icon:'leaf',check:s=>s.entries>=3},
+    {id:'champ14',title:'14-Day Champion',desc:'14 days of showing up',icon:'medal',check:s=>s.streak>=14},
+    {id:'hero30',title:'30-Day Hero',desc:'30 days of consistency',icon:'trending',check:s=>s.streak>=30},
+    {id:'master',title:'Afaq Master',desc:'Collect 800 XP',icon:'sparkle',check:s=>s.xp>=800}
+  ]
+};
+function afaqGetVisits(){ return getData(AFAQ_DAILY_KEYS.VISITS, {}); }
+function afaqSetVisits(v){ setData(AFAQ_DAILY_KEYS.VISITS, v); }
+function afaqMarkDailyVisit(){
+  const key=todayKey(); const visits=afaqGetVisits(); const xpLog=getData(AFAQ_DAILY_KEYS.VISIT_XP, {});
+  if(!visits[key]) visits[key]=true; afaqSetVisits(visits);
+  if(!xpLog[key]){ xpLog[key]=true; setData(AFAQ_DAILY_KEYS.VISIT_XP, xpLog); reward(10); }
+  const streak=afaqCalculateStreak(visits); setData(K.STREAK,{last:key,count:streak.current,longest:streak.longest});
+  return streak;
+}
+function afaqCalculateStreak(visits){
+  let current=0; for(let i=0;i<365;i++){ const d=dateKeyOffset(i); if(visits[d]) current++; else break; }
+  let longest=0, run=0; const keys=Object.keys(visits).sort();
+  for(let i=0;i<keys.length;i++){ if(i===0){run=1;} else { const prev=new Date(keys[i-1]); const cur=new Date(keys[i]); const diff=Math.round((cur-prev)/86400000); run = diff===1 ? run+1 : 1; } longest=Math.max(longest,run); }
+  return {current,longest:Math.max(longest,current)};
+}
+function afaqStatsSnapshot(){
+  const visits=afaqGetVisits(), st=afaqCalculateStreak(visits), xp=getData(K.XP,0);
+  const prog=getData(K.HABIT_PROG,{}); let habitDone=0; Object.values(prog).forEach(h=>{ const days=(h&&h.days)||{}; habitDone+=Object.values(days).filter(Boolean).length; });
+  const entries=getData(K.JOURNAL,[]).length+getData(K.REFLECTIONS,[]).length+getData(K.GRATITUDE,[]).length;
+  return {visits,streak:st.current,longest:st.longest,xp,habitDone,entries,focusMin:getData(P+'stat_focus_min',0),books:getData(K.BOOKS,[]).length,libraryOpened:!!getData(P+'library_opened',false)};
+}
+function afaqCurrentTitle(stats, lang){
+  const titles = lang==='ar'
+    ? [[30,'بطل 30 يوم'],[14,'بطل آفاق'],[7,'صاحب الأسبوع الذهبي'],[3,'مستمر بثبات'],[1,'متدرّب جديد']]
+    : [[30,'30-Day Hero'],[14,'Afaq Champion'],[7,'Golden Week'],[3,'Steady Starter'],[1,'New Starter']];
+  return (titles.find(t=>stats.streak>=t[0])||titles[titles.length-1])[1];
+}
+function afaqNextReward(stats, lang){
+  const goals = [3,7,14,30]; const next=goals.find(g=>stats.streak<g);
+  if(!next) return lang==='ar' ? {label:'كل جوائز الستريك مفتوحة',pct:100} : {label:'All streak rewards unlocked',pct:100};
+  return {label: lang==='ar'?`باقي ${next-stats.streak} يوم لفتح لقب ${next} أيام`:`${next-stats.streak} day(s) to unlock ${next}-day title`, pct:Math.min(100,stats.streak/next*100)};
+}
+function afaqMotivation(lang, streak){
+  const ar=['استمرارك اليوم يصنع نسخة أقوى منك غدًا.','كل علامة صح هنا دليل أنك لم تتوقف.','خطوة صغيرة اليوم أفضل من انتظار يوم مثالي.','أنت تبني عادة، وليس مجرد رقم.'];
+  const en=['Today’s consistency builds tomorrow’s stronger you.','Every check mark proves you kept going.','A small step today beats waiting for a perfect day.','You are building a habit, not just a number.'];
+  return (lang==='ar'?ar:en)[new Date().getDate()%4];
+}
+function renderAfaqDailyDashboard(){
+  const lang=currentLang(); afaqMarkDailyVisit(); const snap=afaqStatsSnapshot(); const title=afaqCurrentTitle(snap,lang); const next=afaqNextReward(snap,lang);
+  if(typeof updateHeroStats==='function') updateHeroStats();
+  const visits=snap.visits;
+  const cal=Array.from({length:30},(_,idx)=>{ const off=29-idx, key=dateKeyOffset(off), done=!!visits[key], today=off===0; return `<div class="daily-day ${done?'done':''} ${today?'today':''}" title="${key}">${done?'':new Date(key).getDate()}</div>`; }).join('');
+  const unlocked=AFAQ_BADGES[lang].filter(b=>b.check(snap));
+  const preview=AFAQ_BADGES[lang].slice(0,6).map(b=>`<div class="reward-mini ${b.check(snap)?'unlocked':''}">${ic(b.icon,'icon-sm')}<div class="r-title">${b.title}</div><div class="r-desc">${b.desc}</div></div>`).join('');
+  const labels={ar:{daily:'لوحة حضورك اليومية',days:'أيام متتالية',longest:'أطول سلسلة',title:'لقبك الحالي',next:'الجائزة القادمة',tools:'أدواتك اليومية',focus:'مؤقت التركيز',water:'شرب الماء',breath:'تنفس وهدوء',library:'مكتبة آفاق',focusSub:'جلسة تركيز قصيرة',waterSub:'تابع أكواب اليوم',breathSub:'دقيقة تعيد الاتزان',librarySub:'كتب وكتب صوتية'},en:{daily:'Your daily check-in board',days:'day streak',longest:'Longest streak',title:'Current title',next:'Next reward',tools:'Your Daily Tools',focus:'Focus Timer',water:'Water',breath:'Breathing',library:'Afaq Library',focusSub:'Start a short focus session',waterSub:'Track today’s cups',breathSub:'One minute to reset',librarySub:'Books and audiobooks'}}[lang];
+  const html=`<div id="afaqHomeUpgrade"><div id="afaqDailyDashboard" class="daily-dashboard-card"><div class="daily-dashboard-head"><div class="daily-streak-orb"><div class="num">${snap.streak}</div><div class="txt">${labels.days}</div></div><div class="daily-dashboard-copy"><h3>${labels.daily}</h3><p>${afaqMotivation(lang,snap.streak)}</p><span class="daily-title-pill">${ic('medal','icon-sm')} ${labels.title}: ${title}</span></div></div><div class="daily-calendar">${cal}</div><div class="daily-progress-row"><span class="muted">${labels.longest}: ${snap.longest}</span><span class="muted">${unlocked.length}/${AFAQ_BADGES[lang].length}</span></div><div class="next-reward-box"><div class="daily-progress-row"><b style="font-size:13px">${labels.next}</b><span class="muted">${Math.round(next.pct)}%</span></div><p class="muted" style="margin:6px 0 8px">${next.label}</p><div class="progress-track"><div class="progress-fill" style="width:${next.pct}%"></div></div></div><div class="reward-preview-grid">${preview}</div></div><div class="section-heading">${labels.tools}</div><div id="afaqHomeTools" class="home-tool-grid"><div class="home-tool-card" onclick="go('pomodoro')"><div class="tool-bubble">${ic('stopwatch')}</div><div><h4>${labels.focus}</h4><p>${labels.focusSub}</p></div></div><div class="home-tool-card" onclick="go('water')"><div class="tool-bubble">${ic('droplet')}</div><div><h4>${labels.water}</h4><p>${labels.waterSub}</p></div></div><div class="home-tool-card" onclick="go('breathing')"><div class="tool-bubble">${ic('bubbles')}</div><div><h4>${labels.breath}</h4><p>${labels.breathSub}</p></div></div><div class="home-tool-card" onclick="go('library')"><div class="tool-bubble">${ic('book-open')}</div><div><h4>${labels.library}</h4><p>${labels.librarySub}</p></div></div></div></div>`;
+  const hero=document.querySelector('#screen-home .hero-panel'); if(!hero) return;
+  const old=document.getElementById('afaqHomeUpgrade'); if(old) old.outerHTML=html; else hero.insertAdjacentHTML('afterend',html);
+}
+const afaqOriginalRenderHome = renderHome;
+renderHome = function(){ afaqOriginalRenderHome(); renderAfaqDailyDashboard(); };
+function afaqOpenExternal(url){ window.location.href=url; }
+function renderLibrary(type){
+  type=type||'books'; const lang=currentLang(); setData(P+'library_opened',true);
+  const t={ar:{title:'مكتبة آفاق',sub:'كتب وكتب صوتية مختارة لتطوير الذات، إدارة الوقت، التركيز، والنجاح.',note:'جميع الكتب هنا من مصادر مجانية وقانونية أو من الملكية العامة، وتفتح من مصدرها الرسمي.',books:'كتب للقراءة',audio:'كتب صوتية',read:'قراءة',listen:'استماع',source:'المصدر'},en:{title:'Afaq Library',sub:'Selected books and audiobooks for self-development, time management, focus, and success.',note:'All books here are from free legal/public-domain sources and open from their official source.',books:'Books',audio:'Audiobooks',read:'Read',listen:'Listen',source:'Source'}}[lang];
+  const byId={libraryTitle:t.title,librarySub:t.sub,libraryLegalNote:t.note,libraryBooksTab:t.books,libraryAudioTab:t.audio}; Object.keys(byId).forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=byId[id]; });
+  document.getElementById('libraryBooksTab')?.classList.toggle('active',type==='books'); document.getElementById('libraryAudioTab')?.classList.toggle('active',type==='audio');
+  const list=AFAQ_LIBRARY[type];
+  const html=list.map(b=>`<div class="library-card"><h3>${ic(type==='audio'?'bubbles':'book-open','icon-sm')} ${lang==='ar'?b.arTitle:b.title}</h3><p>${lang==='ar'?b.arDesc:`${b.author} • ${b.cat}`}</p><div class="meta"><span class="library-pill">${lang==='ar'?b.arCat:b.cat}</span><span class="library-pill">${t.source}: ${b.source}</span><span class="library-pill">${b.author}</span></div><div class="library-actions"><button class="btn btn-primary" onclick="afaqOpenExternal('${b.url}')">${type==='audio'?t.listen:t.read}</button></div></div>`).join('');
+  document.getElementById('libraryList').innerHTML=html;
+}
+const afaqOriginalGo = go;
+go = function(name){ afaqOriginalGo(name); if(name==='library') renderLibrary('books'); };
+const afaqOriginalToggleLanguage = toggleLanguage;
+toggleLanguage = function(){ afaqOriginalToggleLanguage(); const cur=navStack[navStack.length-1]; if(cur==='library') renderLibrary(document.getElementById('libraryAudioTab')?.classList.contains('active')?'audio':'books'); if(cur==='home') renderAfaqDailyDashboard(); };
+SCREEN_TITLES.ar.library='مكتبة آفاق'; SCREEN_TITLES.en.library='Afaq Library';
+function afaqBadgeState(){ const lang=currentLang(); const s=afaqStatsSnapshot(); return AFAQ_BADGES[lang].map(b=>({...b,unlocked:b.check(s)})); }
+renderAchievements = function(){ const badges=afaqBadgeState(); document.getElementById('badgeGrid').innerHTML=badges.map(b=>`<div class="badge-card ${b.unlocked?'unlocked':''}"><div class="b-icon">${ic(b.icon,'icon-lg')}</div><div class="b-title">${b.title}</div><div class="b-desc">${b.desc}</div></div>`).join(''); };
+function afaqFocusAlert(title, body){
+  try{ if(window.AfaqAndroid&&typeof window.AfaqAndroid.showNotification==='function') window.AfaqAndroid.showNotification(title,body); }catch(e){}
+  try{ navigator.vibrate?.([300,120,300,120,500]); }catch(e){}
+  try{ const C=window.AudioContext||window.webkitAudioContext; if(C){ const ctx=window.afaqAudioCtx||new C(); window.afaqAudioCtx=ctx; if(ctx.state==='suspended')ctx.resume(); const now=ctx.currentTime+.03; [880,1175,988,784].forEach((f,i)=>{ const o=ctx.createOscillator(), g=ctx.createGain(), st=now+i*.22; o.type='sine'; o.frequency.setValueAtTime(f,st); g.gain.setValueAtTime(.0001,st); g.gain.exponentialRampToValueAtTime(.22,st+.03); g.gain.exponentialRampToValueAtTime(.0001,st+.2); o.connect(g); g.connect(ctx.destination); o.start(st); o.stop(st+.23); }); }}catch(e){}
+}
+let afaqPomoBaseMinutes=25;
+setPomoDuration = function(mins, btn){ if(pomoState.active) return; afaqPomoBaseMinutes=mins; pomoState.minutes=mins; pomoState.seconds=0; pomoState.mode='focus'; document.querySelectorAll('#pomoDurationChips .btn-chip').forEach(b=>b.classList.remove('active')); btn?.classList.add('active'); updatePomoUI(); };
+updatePomoUI = function(){ const el=document.getElementById('pomoTime'); if(!el)return; el.textContent=`${String(pomoState.minutes).padStart(2,'0')}:${String(pomoState.seconds).padStart(2,'0')}`; const lang=currentLang(); const modeEl=document.getElementById('pomoMode'); if(modeEl)modeEl.textContent=pomoState.mode==='focus'?(lang==='ar'?'تركيز':'Focus Session'):(lang==='ar'?'استراحة':'Break'); const totalSec=(pomoState.mode==='focus'?afaqPomoBaseMinutes:5)*60; const currentSec=pomoState.minutes*60+pomoState.seconds; document.getElementById('pomoRing')?.style.setProperty('--deg', totalSec?((totalSec-currentSec)/totalSec)*360:0); const st=document.getElementById('pomoSessionsText'); if(st)st.textContent=(lang==='ar'?'جلسات اليوم المكتملة: ':'Completed Sessions Today: ')+pomoState.sessions; };
+function afaqPomoTick(){ const rem=Math.max(0,Math.ceil((pomoState.endAt-Date.now())/1000)); pomoState.minutes=Math.floor(rem/60); pomoState.seconds=rem%60; updatePomoUI(); if(rem<=0){ clearInterval(pomoState.interval); pomoState.active=false; const lang=currentLang(); if(pomoState.mode==='focus'){ pomoState.sessions++; reward(15); let fMin=getData(P+'stat_focus_min',0); fMin+=afaqPomoBaseMinutes; setData(P+'stat_focus_min',fMin); afaqFocusAlert(lang==='ar'?'انتهت جلسة التركيز':'Focus session complete',lang==='ar'?'أحسنت! خذ استراحة قصيرة.':'Great work! Take a short break.'); showToast(lang==='ar'?'انتهت جلسة التركيز! (+15)':'Focus session complete! (+15)'); pomoState.mode='break'; pomoState.minutes=5; pomoState.seconds=0; } else { afaqFocusAlert(lang==='ar'?'انتهت الاستراحة':'Break complete',lang==='ar'?'لنعد للتركيز.':'Let’s get back to focus.'); pomoState.mode='focus'; pomoState.minutes=afaqPomoBaseMinutes; pomoState.seconds=0; } document.getElementById('pomoStartBtn').textContent=lang==='ar'?'ابدأ':'Start'; updatePomoUI(); } }
+togglePomo = function(){ const btn=document.getElementById('pomoStartBtn'), lang=currentLang(); if(pomoState.active){ clearInterval(pomoState.interval); pomoState.active=false; btn.textContent=lang==='ar'?'ابدأ':'Start'; return; } try{ const C=window.AudioContext||window.webkitAudioContext; if(C){ window.afaqAudioCtx=window.afaqAudioCtx||new C(); window.afaqAudioCtx.resume?.(); }}catch(e){} pomoState.active=true; btn.textContent=lang==='ar'?'إيقاف مؤقت':'Pause'; const rem=pomoState.minutes*60+pomoState.seconds; pomoState.endAt=Date.now()+rem*1000; try{ if(window.AfaqAndroid&&typeof window.AfaqAndroid.startFocusTimer==='function'&&pomoState.mode==='focus') window.AfaqAndroid.startFocusTimer(pomoState.minutes); }catch(e){} clearInterval(pomoState.interval); pomoState.interval=setInterval(afaqPomoTick,1000); afaqPomoTick(); };
+resetPomo = function(){ clearInterval(pomoState.interval); pomoState.active=false; pomoState.minutes=afaqPomoBaseMinutes; pomoState.seconds=0; pomoState.mode='focus'; document.getElementById('pomoStartBtn').textContent=currentLang()==='ar'?'ابدأ':'Start'; try{ window.AfaqAndroid?.stopFocusTimer?.(); }catch(e){} updatePomoUI(); };
+renderPomodoro = function(){ if(!afaqPomoBaseMinutes) afaqPomoBaseMinutes=25; resetPomo(); updatePomoUI(); };
 
 /* ===== Global Initialization Routine ===== */
 window.addEventListener('DOMContentLoaded', () => {
