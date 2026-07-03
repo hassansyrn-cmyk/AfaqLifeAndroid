@@ -1,193 +1,148 @@
 package com.afaq.life
 
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.media.RingtoneManager
+import android.graphics.Color
+import android.net.Uri
 import android.os.Build
-import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
-import android.os.PowerManager
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.webkit.JavascriptInterface
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
+import android.os.Bundle
+import android.view.ViewGroup
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.FrameLayout
 
-class AfaqAndroid(
-    private val context: Context,
-    private val notificationHelper: NotificationHelper
-) {
+class MainActivity : Activity() {
+    private lateinit var webView: WebView
+    private lateinit var notificationHelper: NotificationHelper
 
-    private val mainHandler = Handler(Looper.getMainLooper())
-    private var focusTimer: CountDownTimer? = null
-    private var wakeLock: PowerManager.WakeLock? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    private val channelId = "afaq_focus_timer"
-    private val notificationId = 1007
+        window.statusBarColor = Color.parseColor("#4A6760")
+        window.navigationBarColor = Color.parseColor("#F8F5ED")
 
-    init {
-        createNotificationChannel()
-    }
+        notificationHelper = NotificationHelper(this)
+        requestNotificationPermissionIfNeeded()
 
-    @JavascriptInterface
-    fun showNotification(title: String, body: String) {
-        mainHandler.post {
-            showNativeNotification(title, body)
-        }
-    }
-
-    @JavascriptInterface
-    fun startFocusTimer(minutes: Int) {
-        mainHandler.post {
-            val safeMinutes = minutes.coerceIn(1, 180)
-            startNativeFocusTimer(safeMinutes)
-        }
-    }
-
-    @JavascriptInterface
-    fun stopFocusTimer() {
-        mainHandler.post {
-            stopNativeFocusTimer()
-        }
-    }
-
-    private fun startNativeFocusTimer(minutes: Int) {
-        stopNativeFocusTimer()
-        acquireWakeLock(minutes)
-
-        val totalMillis = minutes * 60 * 1000L
-
-        showNativeNotification(
-            "آفاق - مؤقت التركيز",
-            "بدأت جلسة تركيز لمدة $minutes دقيقة"
+        webView = WebView(this)
+        webView.setBackgroundColor(Color.parseColor("#F8F5ED"))
+        webView.layoutParams = FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
         )
 
-        focusTimer = object : CountDownTimer(totalMillis, 1000L) {
-            override fun onTick(millisUntilFinished: Long) {
-                // يعمل المؤقت Native حتى لو انطفأت الشاشة.
-            }
+        configureWebView()
 
-            override fun onFinish() {
-                releaseWakeLock()
-                playFinishSound()
-                vibratePhone()
+        val container = FrameLayout(this).apply {
+            setBackgroundColor(Color.parseColor("#F8F5ED"))
+            addView(webView)
+        }
 
-                showNativeNotification(
-                    "انتهت جلسة التركيز",
-                    "أحسنت! خذ استراحة قصيرة الآن."
-                )
-            }
-        }.start()
+        setContentView(container)
+
+        if (savedInstanceState == null) {
+            webView.loadUrl(LOCAL_INDEX_URL)
+        } else {
+            webView.restoreState(savedInstanceState)
+        }
     }
 
-    private fun stopNativeFocusTimer() {
-        focusTimer?.cancel()
-        focusTimer = null
-        releaseWakeLock()
+    override fun onSaveInstanceState(outState: Bundle) {
+        webView.saveState(outState)
+        super.onSaveInstanceState(outState)
     }
 
-    private fun acquireWakeLock(minutes: Int) {
-        try {
-            val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
-            wakeLock = powerManager.newWakeLock(
-                PowerManager.PARTIAL_WAKE_LOCK,
-                "Afaq:FocusTimerWakeLock"
+    override fun onBackPressed() {
+        if (::webView.isInitialized && webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    private fun configureWebView() {
+        WebView.setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
+
+        webView.settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            databaseEnabled = true
+            allowFileAccess = true
+            allowContentAccess = true
+            loadsImagesAutomatically = true
+            cacheMode = WebSettings.LOAD_DEFAULT
+            mediaPlaybackRequiresUserGesture = false
+            setSupportMultipleWindows(false)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                allowFileAccessFromFileURLs = true
+                allowUniversalAccessFromFileURLs = false
+            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+            }
+        }
+
+        webView.addJavascriptInterface(
+            AfaqAndroid(this, notificationHelper),
+            "AfaqAndroid"
+        )
+
+        webView.webChromeClient = WebChromeClient()
+
+        webView.webViewClient = object : WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView,
+                request: WebResourceRequest
+            ): Boolean {
+                return handleUrl(request.url)
+            }
+
+            @Deprecated("Kept for Android API 23 compatibility.")
+            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                return handleUrl(Uri.parse(url))
+            }
+        }
+    }
+
+    private fun handleUrl(uri: Uri): Boolean {
+        val url = uri.toString()
+
+        val isLocalWebAsset =
+            url.startsWith(LOCAL_WEB_BASE_URL) ||
+                (uri.scheme == null && (url == "privacy.html" || url == "index.html"))
+
+        return if (isLocalWebAsset) {
+            false
+        } else {
+            runCatching {
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
+            }
+            true
+        }
+    }
+
+    private fun requestNotificationPermissionIfNeeded() {
+        if (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                REQUEST_POST_NOTIFICATIONS
             )
-
-            val timeoutMillis = (minutes + 2) * 60 * 1000L
-            wakeLock?.acquire(timeoutMillis)
-        } catch (_: Exception) {
         }
     }
 
-    private fun releaseWakeLock() {
-        try {
-            if (wakeLock?.isHeld == true) {
-                wakeLock?.release()
-            }
-        } catch (_: Exception) {
-        } finally {
-            wakeLock = null
-        }
-    }
-
-    private fun showNativeNotification(title: String, body: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val granted = ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-
-            if (!granted) return
-        }
-
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        val notification = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle(title)
-            .setContentText(body)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
-            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-            .build()
-
-        notificationManager.notify(notificationId, notification)
-    }
-
-    private fun playFinishSound() {
-        try {
-            val uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-            val ringtone = RingtoneManager.getRingtone(context, uri)
-            ringtone.play()
-        } catch (_: Exception) {
-        }
-    }
-
-    private fun vibratePhone() {
-        try {
-            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(
-                    VibrationEffect.createWaveform(
-                        longArrayOf(0, 300, 120, 300, 120, 500),
-                        -1
-                    )
-                )
-            } else {
-                @Suppress("DEPRECATION")
-                vibrator.vibrate(longArrayOf(0, 300, 120, 300, 120, 500), -1)
-            }
-        } catch (_: Exception) {
-        }
-    }
-
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Afaq Focus Timer",
-                NotificationManager.IMPORTANCE_HIGH
-            ).apply {
-                description = "Focus timer completion alerts"
-                enableVibration(true)
-                setSound(
-                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
-                    null
-                )
-            }
-
-            val notificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-            notificationManager.createNotificationChannel(channel)
-        }
+    companion object {
+        private const val REQUEST_POST_NOTIFICATIONS = 1001
+        private const val LOCAL_WEB_BASE_URL = "file:///android_asset/web/"
+        private const val LOCAL_INDEX_URL = "${LOCAL_WEB_BASE_URL}index.html"
     }
 }
