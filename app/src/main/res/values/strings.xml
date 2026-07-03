@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">آفاق | تطوير الحياة</string>
+    <string name="app_name_english">Afaq | Life Development</string>
+    <string name="notification_channel_name">Afaq Reminders</string>
+    <string name="notification_channel_description">Native reminders from Afaq.</string>
+</resources>
