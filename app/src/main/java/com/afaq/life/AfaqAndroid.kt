@@ -17,7 +17,10 @@ import android.webkit.JavascriptInterface
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 
-class AfaqAndroid(private val context: Context) {
+class AfaqAndroid(
+    private val context: Context,
+    private val notificationHelper: NotificationHelper
+) {
 
     private val mainHandler = Handler(Looper.getMainLooper())
     private var focusTimer: CountDownTimer? = null
@@ -65,8 +68,7 @@ class AfaqAndroid(private val context: Context) {
 
         focusTimer = object : CountDownTimer(totalMillis, 1000L) {
             override fun onTick(millisUntilFinished: Long) {
-                // المؤقت يعمل Native حتى لو الشاشة انطفأت.
-                // لا نحدث الواجهة هنا حتى لا نثقل WebView.
+                // Native timer keeps running while the screen is off.
             }
 
             override fun onFinish() {
