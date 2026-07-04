@@ -1,61 +1,65 @@
 name: Android Build
 
 on:
-  workflow_dispatch:
   push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
-    name: Build APK and AAB
+    name: Build Signed AAB
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "17"
-          cache: gradle
+          java-version: 17
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install Android API 35
-        run: |
-          sdkmanager "platforms;android-35" "build-tools;35.0.0"
-
-      - name: Make Gradle wrapper executable
+      - name: Make Gradle executable
         run: chmod +x ./gradlew
 
-      - name: Clean
-        run: ./gradlew clean
+      - name: Build release AAB unsigned
+        run: ./gradlew clean bundleRelease
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > afaq-upload-key.jks
 
-      - name: Build unsigned release AAB
-        run: ./gradlew bundleRelease
+      - name: Copy unsigned AAB
+        run: |
+          mkdir -p signed-output
+          cp app/build/outputs/bundle/release/app-release.aab signed-output/afaq-release-signed.aab
+
+      - name: Sign AAB
+        run: |
+          jarsigner \
+            -verbose \
+            -sigalg SHA256withRSA \
+            -digestalg SHA-256 \
+            -keystore afaq-upload-key.jks \
+            -storepass "${{ secrets.KEYSTORE_PASSWORD }}" \
+            -keypass "${{ secrets.KEY_PASSWORD }}" \
+            signed-output/afaq-release-signed.aab \
+            "${{ secrets.KEY_ALIAS }}"
+
+      - name: Verify signed AAB
+        run: |
+          jarsigner -verify -verbose -certs signed-output/afaq-release-signed.aab
+
+      - name: Upload signed AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: afaq-release-aab-signed
+          path: signed-output/afaq-release-signed.aab
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
           name: afaq-debug-apk
           path: app/build/outputs/apk/debug/*.apk
-          if-no-files-found: error
-
-      - name: Upload release AAB
-        uses: actions/upload-artifact@v4
-        with:
-          name: afaq-release-aab-unsigned
-          path: app/build/outputs/bundle/release/*.aab
-          if-no-files-found: error
-
-      - name: Upload mapping files
-        uses: actions/upload-artifact@v4
-        with:
-          name: afaq-mapping-files
-          path: app/build/outputs/mapping/**/*
-          if-no-files-found: ignore
