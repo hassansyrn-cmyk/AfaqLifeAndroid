@@ -495,6 +495,13 @@
       <span class="btn btn-outline btn-sm" data-i18n="read_more">اقرأ المزيد</span>
     </div>
 
+    <div class="card flip-card accented" id="homeBookCard" onclick="afaqOpenDailyBook()" style="min-height:0; padding:22px; text-align:right; display:block;">
+      <h3><svg class="icon" viewBox="0 0 24 24"><use href="#i-book-open"></use></svg> <span id="homeBookLabel">كتاب اليوم</span></h3>
+      <p id="home-book-title" style="margin:0 0 4px; font-weight:800; font-size:16px;"></p>
+      <p id="home-book-desc" class="muted" style="margin-bottom:14px; font-size:13px;"></p>
+      <span class="btn btn-outline btn-sm" id="homeBookBtnLabel">افتح المكتبة</span>
+    </div>
+
     <div class="quick-grid">
       <div class="card quick-card" onclick="go('mood')"><div class="quick-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#i-leaf"></use></svg></div><p style="font-weight:700; font-size:13px; margin:0;" data-i18n="mood_indicator">مؤشر اليوم</p></div>
       <div class="card quick-card" onclick="go('breathing')"><div class="quick-icon"><svg class="icon" viewBox="0 0 24 24"><use href="#i-bubbles"></use></svg></div><p style="font-weight:700; font-size:13px; margin:0;" data-i18n="breathing_exercise">تمرين تنفس</p></div>
@@ -596,10 +603,11 @@
         </select>
       </div>
       <div class="notify-grid" id="notifyGrid">
-        <div class="notify-chip active" id="chip-water-not"><svg class="icon icon-sm" viewBox="0 0 24 24"><use href="#i-droplet"></use></svg> <span data-i18n="water_tracking">شرب الماء</span></div>
-        <div class="notify-chip active" id="chip-breathe-not"><svg class="icon icon-sm" viewBox="0 0 24 24"><use href="#i-bubbles"></use></svg> <span data-i18n="breathing_exercise">التنفس</span></div>
-        <div class="notify-chip active" id="chip-tips-not"><svg class="icon icon-sm" viewBox="0 0 24 24"><use href="#i-sparkle"></use></svg> <span data-i18n="random_tips">نصائح عشوائية</span></div>
-        <div class="notify-chip active" id="chip-habits-not"><svg class="icon icon-sm" viewBox="0 0 24 24"><use href="#i-check-circle"></use></svg> <span data-i18n="habits">العادات</span></div>
+        <div class="notify-chip active" id="chip-water-not" onclick="afaqToggleNotifyChip('water')"><svg class="icon icon-sm" viewBox="0 0 24 24"><use href="#i-droplet"></use></svg> <span data-i18n="water_tracking">شرب الماء</span></div>
+        <div class="notify-chip active" id="chip-breathe-not" onclick="afaqToggleNotifyChip('breathe')"><svg class="icon icon-sm" viewBox="0 0 24 24"><use href="#i-bubbles"></use></svg> <span data-i18n="breathing_exercise">التنفس</span></div>
+        <div class="notify-chip active" id="chip-tips-not" onclick="afaqToggleNotifyChip('tips')"><svg class="icon icon-sm" viewBox="0 0 24 24"><use href="#i-sparkle"></use></svg> <span data-i18n="random_tips">نصائح عشوائية</span></div>
+        <div class="notify-chip active" id="chip-habits-not" onclick="afaqToggleNotifyChip('habits')"><svg class="icon icon-sm" viewBox="0 0 24 24"><use href="#i-check-circle"></use></svg> <span data-i18n="habits">العادات</span></div>
+        <div class="notify-chip active" id="chip-library-not" onclick="afaqToggleNotifyChip('library')"><svg class="icon icon-sm" viewBox="0 0 24 24"><use href="#i-book-open"></use></svg> <span data-i18n="afaq_library">مكتبة آفاق</span></div>
       </div>
       <p class="notify-note" id="smartNotifyNote" data-i18n="smart_notify_note">ملاحظة: في نسخة الويب الحالية تعمل التذكيرات عندما يكون التطبيق مفتوحًا أو مثبتًا ومفتوحًا. للحصول على إشعارات حتى عند إغلاق التطبيق بالكامل نحتاج لاحقًا Push Notifications مع Backend أو إعدادات Android بعد التحويل.</p>
     </div>
@@ -876,6 +884,10 @@
     <p class="hero-sub" id="librarySub">كتب وكتب صوتية مختارة لتطوير الذات، إدارة الوقت، التركيز، والنجاح.</p>
     <div class="library-note" id="libraryLegalNote">جميع الكتب هنا من مصادر مجانية وقانونية أو من الملكية العامة، وتفتح من مصدرها الرسمي.</div>
     <div class="library-tabs">
+      <button class="btn-chip active" id="libraryLangAr" onclick="setLibraryLang('ar')">📚 العربية</button>
+      <button class="btn-chip" id="libraryLangEn" onclick="setLibraryLang('en')">🌍 إنجليزي</button>
+    </div>
+    <div class="library-tabs">
       <button class="btn-chip active" id="libraryBooksTab" onclick="renderLibrary('books')">كتب للقراءة</button>
       <button class="btn-chip" id="libraryAudioTab" onclick="renderLibrary('audio')">كتب صوتية</button>
     </div>
@@ -886,6 +898,7 @@
   <div class="screen" id="screen-stats">
     <h1 class="hero-title" data-i18n="your_stats">إحصائياتك</h1>
     <p class="hero-sub" data-i18n="stats_sub_long">نظرة شاملة على رحلتك مع آفاق</p>
+    <button class="btn btn-gold btn-block" style="margin-bottom:16px;" onclick="afaqShareProgress()">📤 <span id="shareProgressLabel">مشاركة إنجازك</span></button>
     <div class="stat-grid" style="margin-bottom:16px;">
       <div class="stat-box"><div class="sv" id="statStreak">0</div><div class="sl" data-i18n="streak_days">أيام متتالية</div></div>
       <div class="stat-box"><div class="sv" id="statLongest">0</div><div class="sl" data-i18n="longest_streak">أطول سلسلة</div></div>
@@ -2434,20 +2447,39 @@ function renderAchievements(){
 /* ===== Afaq v1.1 Home Dashboard + Library + Rewards Upgrade ===== */
 const AFAQ_DAILY_KEYS = { VISITS:P+'daily_visits_v2', VISIT_XP:P+'daily_visit_xp_v2' };
 const AFAQ_LIBRARY = {
-  books: [
-    {title:'العقل الباطن', author:'سلامة موسى', language:'العربية', cat:'علم النفس وتطوير الذات', source:'صفحات / هنداوي', url:'https://www.safahat.org/books/82064868/1/', embedUrl:'https://www.safahat.org/books/82064868/1/', desc:'كتاب عربي مبسط عن فهم النفس والعقل الباطن وكيف تؤثر العادات والخواطر في السلوك.'},
-    {title:'طبائع الاستبداد ومصارع الاستعباد', author:'عبد الرحمن الكواكبي', language:'العربية', cat:'الوعي والحرية وبناء الشخصية', source:'صفحات / هنداوي', url:'https://www.safahat.org/books/30272530/1/', embedUrl:'https://www.safahat.org/books/30272530/1/', desc:'كتاب كلاسيكي عربي في الوعي، الحرية، مقاومة الخضوع، وبناء عقلية مسؤولة.'},
-    {title:'أدب الدنيا والدين', author:'أبو الحسن الماوردي', language:'العربية', cat:'الأخلاق وإدارة الحياة', source:'Internet Archive', url:'https://archive.org/details/Adaba_aldiy_Waldunya', embedUrl:'https://archive.org/embed/Adaba_aldiy_Waldunya', desc:'كتاب تراثي مهم في الأخلاق، آداب النفس، العلم، وصلاح الحياة.'},
-    {title:'هكذا خُلقت', author:'محمد حسين هيكل', language:'العربية', cat:'الرواية والوعي الاجتماعي', source:'صفحات / هنداوي', url:'https://www.safahat.org/books/30272028/1/', embedUrl:'https://www.safahat.org/books/30272028/1/', desc:'رواية عربية تساعد القارئ على التأمل في السلوك، الاختيارات، والعلاقات الإنسانية.'},
-    {title:'جبران خليل جبران', author:'ميخائيل نعيمة', language:'العربية', cat:'السيرة والإلهام', source:'Arabic Collections Online', url:'https://aco.dlib.nyu.edu/ark:/48907/f3sq8x0p', embedUrl:'https://aco.dlib.nyu.edu/ark:/48907/f3sq8x0p', desc:'سيرة أدبية ملهمة عن جبران وأثر الفكر والكتابة في صناعة الإنسان.'},
-    {title:'مجموعة كتب عربية عامة', author:'Arabic Collections Online', language:'العربية', cat:'مكتبة عربية عامة', source:'ACO', url:'https://aco.dlib.nyu.edu/', embedUrl:'https://aco.dlib.nyu.edu/', desc:'بوابة لمكتبة عربية رقمية عامة تضم كتبًا عربية من الملكية العامة.'}
-  ],
-  audio: [
-    {title:'طبائع الاستبداد ومصارع الاستعباد', author:'عبد الرحمن الكواكبي', language:'العربية', cat:'كتاب صوتي عربي', source:'LibriVox / Internet Archive', url:'https://archive.org/details/tabai_al-istibdad_wa-masari_al-istibad_1903_librivox', embedUrl:'https://archive.org/embed/tabai_al-istibdad_wa-masari_al-istibad_1903_librivox', desc:'تسجيل عربي كامل من LibriVox لكتاب طبائع الاستبداد ومصارع الاستعباد.'},
-    {title:'أدب الدنيا والدين', author:'أبو الحسن الماوردي', language:'العربية', cat:'كتاب صوتي عربي', source:'LibriVox / Internet Archive', url:'https://archive.org/details/kitab_adab_dunya_1107_librivox', embedUrl:'https://archive.org/embed/kitab_adab_dunya_1107_librivox', desc:'تسجيل عربي كامل لكتاب أدب الدنيا والدين، مناسب للأخلاق وإدارة الحياة.'},
-    {title:'تصفح كتب صوتية عربية عامة', author:'LibriVox', language:'العربية', cat:'مكتبة صوتية عامة', source:'LibriVox', url:'https://librivox.org/search?language=Arabic&action=Search', embedUrl:'https://librivox.org/search?language=Arabic&action=Search', desc:'صفحة بحث الكتب الصوتية العربية في LibriVox لاستكشاف تسجيلات عربية مجانية.'}
-  ]
+  ar: {
+    books: [
+      {title:'العقل الباطن', author:'سلامة موسى', language:'العربية', cat:'علم النفس وتطوير الذات', source:'صفحات / هنداوي', url:'https://www.safahat.org/books/82064868/1/', embedUrl:'https://www.safahat.org/books/82064868/1/', desc:'كتاب عربي مبسط عن فهم النفس والعقل الباطن وكيف تؤثر العادات والخواطر في السلوك.'},
+      {title:'طبائع الاستبداد ومصارع الاستعباد', author:'عبد الرحمن الكواكبي', language:'العربية', cat:'الوعي والحرية وبناء الشخصية', source:'صفحات / هنداوي', url:'https://www.safahat.org/books/30272530/1/', embedUrl:'https://www.safahat.org/books/30272530/1/', desc:'كتاب كلاسيكي عربي في الوعي، الحرية، مقاومة الخضوع، وبناء عقلية مسؤولة.'},
+      {title:'أدب الدنيا والدين', author:'أبو الحسن الماوردي', language:'العربية', cat:'الأخلاق وإدارة الحياة', source:'Internet Archive', url:'https://archive.org/details/Adaba_aldiy_Waldunya', embedUrl:'https://archive.org/embed/Adaba_aldiy_Waldunya', desc:'كتاب تراثي مهم في الأخلاق، آداب النفس، العلم، وصلاح الحياة.'},
+      {title:'هكذا خُلقت', author:'محمد حسين هيكل', language:'العربية', cat:'الرواية والوعي الاجتماعي', source:'صفحات / هنداوي', url:'https://www.safahat.org/books/30272028/1/', embedUrl:'https://www.safahat.org/books/30272028/1/', desc:'رواية عربية تساعد القارئ على التأمل في السلوك، الاختيارات، والعلاقات الإنسانية.'},
+      {title:'جبران خليل جبران', author:'ميخائيل نعيمة', language:'العربية', cat:'السيرة والإلهام', source:'Arabic Collections Online', url:'https://aco.dlib.nyu.edu/ark:/48907/f3sq8x0p', embedUrl:'https://aco.dlib.nyu.edu/ark:/48907/f3sq8x0p', desc:'سيرة أدبية ملهمة عن جبران وأثر الفكر والكتابة في صناعة الإنسان.'},
+      {title:'تهذيب الأخلاق', author:'ابن مسكويه', language:'العربية', cat:'الأخلاق وضبط النفس', source:'Internet Archive', url:'https://archive.org/details/malsamahe_yahoo_201308', embedUrl:'https://archive.org/embed/malsamahe_yahoo_201308', desc:'أول كتاب عربي يتناول علم الأخلاق بمنظور فلسفي عميق، ويؤسس لفكرة تهذيب النفس وضبطها.'},
+      {title:'مجموعة كتب عربية عامة', author:'Arabic Collections Online', language:'العربية', cat:'مكتبة عربية عامة', source:'ACO', url:'https://aco.dlib.nyu.edu/', embedUrl:'https://aco.dlib.nyu.edu/', desc:'بوابة لمكتبة عربية رقمية عامة تضم كتبًا عربية من الملكية العامة.'}
+    ],
+    audio: [
+      {title:'طبائع الاستبداد ومصارع الاستعباد', author:'عبد الرحمن الكواكبي', language:'العربية', cat:'كتاب صوتي عربي', source:'LibriVox / Internet Archive', url:'https://archive.org/details/tabai_al-istibdad_wa-masari_al-istibad_1903_librivox', embedUrl:'https://archive.org/embed/tabai_al-istibdad_wa-masari_al-istibad_1903_librivox', desc:'تسجيل عربي كامل من LibriVox لكتاب طبائع الاستبداد ومصارع الاستعباد.'},
+      {title:'أدب الدنيا والدين', author:'أبو الحسن الماوردي', language:'العربية', cat:'كتاب صوتي عربي', source:'LibriVox / Internet Archive', url:'https://archive.org/details/kitab_adab_dunya_1107_librivox', embedUrl:'https://archive.org/embed/kitab_adab_dunya_1107_librivox', desc:'تسجيل عربي كامل لكتاب أدب الدنيا والدين، مناسب للأخلاق وإدارة الحياة.'},
+      {title:'تصفح كتب صوتية عربية عامة', author:'LibriVox', language:'العربية', cat:'مكتبة صوتية عامة', source:'LibriVox', url:'https://librivox.org/search?language=Arabic&action=Search', embedUrl:'https://librivox.org/search?language=Arabic&action=Search', desc:'صفحة بحث الكتب الصوتية العربية في LibriVox لاستكشاف تسجيلات عربية مجانية.'}
+    ]
+  },
+  en: {
+    books: [
+      {title:'As a Man Thinketh', author:'James Allen', language:'English', cat:'Self-Development Classic', source:'Internet Archive', url:'https://archive.org/details/asmanthinketh00alleiala', embedUrl:'https://archive.org/embed/asmanthinketh00alleiala', desc:'A foundational 1902 self-help classic on how thoughts shape character and life outcomes.'},
+      {title:'Acres of Diamonds', author:'Russell Conwell', language:'English', cat:'Motivation & Opportunity', source:'Internet Archive', url:'https://archive.org/details/acresdiamonds00shacgoog', embedUrl:'https://archive.org/embed/acresdiamonds00shacgoog', desc:'A famous inspirational lecture on finding opportunity and success in your own life, right where you are.'},
+      {title:'Self-Reliance and Other Essays', author:'Ralph Waldo Emerson', language:'English', cat:'Character & Independence', source:'Internet Archive', url:'https://archive.org/details/selfrelianceessay00emerrich', embedUrl:'https://archive.org/embed/selfrelianceessay00emerrich', desc:'Emerson\'s timeless essay on trusting yourself and building an independent, resilient character.'},
+      {title:'Meditations', author:'Marcus Aurelius', language:'English', cat:'Stoic Philosophy & Calm', source:'Internet Archive', url:'https://archive.org/details/meditationsofmar00marc', embedUrl:'https://archive.org/embed/meditationsofmar00marc', desc:'Personal reflections of a Roman emperor on discipline, patience, and inner peace — a stoic classic.'}
+    ],
+    audio: [
+      {title:'As a Man Thinketh (Audiobook)', author:'James Allen', language:'English', cat:'Self-Development Classic', source:'LibriVox / Internet Archive', url:'https://archive.org/details/asamanthinkethversion4_1502_librivox', embedUrl:'https://archive.org/embed/asamanthinkethversion4_1502_librivox', desc:'Full free LibriVox narration of As a Man Thinketh.'},
+      {title:'Acres of Diamonds (Audiobook)', author:'Russell Conwell', language:'English', cat:'Motivation & Opportunity', source:'LibriVox / Internet Archive', url:'https://archive.org/details/acres_of_diamonds_1008_librivox', embedUrl:'https://archive.org/embed/acres_of_diamonds_1008_librivox', desc:'Full free LibriVox narration of the classic Acres of Diamonds lecture.'},
+      {title:'Essays, First Series incl. Self-Reliance (Audiobook)', author:'Ralph Waldo Emerson', language:'English', cat:'Character & Independence', source:'LibriVox / Internet Archive', url:'https://archive.org/details/essaysfirstseries_1207_librivox', embedUrl:'https://archive.org/embed/essaysfirstseries_1207_librivox', desc:'Free LibriVox narration of Emerson\'s 12 essays, including Self-Reliance.'},
+      {title:'Meditations (Audiobook)', author:'Marcus Aurelius', language:'English', cat:'Stoic Philosophy & Calm', source:'LibriVox / Internet Archive', url:'https://archive.org/details/meditations_0708_librivox', embedUrl:'https://archive.org/embed/meditations_0708_librivox', desc:'Free LibriVox narration of Marcus Aurelius\'s Meditations.'}
+    ]
+  }
 };
+let currentLibraryLang = 'ar';
+let currentLibraryType = 'books';
 const AFAQ_BADGES = {
   ar: [
     {id:'starter',title:'البداية المباركة',desc:'سجل أول حضور في آفاق',icon:'star',check:s=>s.xp>0},
@@ -2550,14 +2582,33 @@ function afaqCloseViewer(){
   overlay.classList.remove('show');
 }
 function afaqOpenExternal(url){ afaqOpenViewer(url,'مكتبة آفاق'); }
+function setLibraryLang(lang){
+  currentLibraryLang = lang;
+  document.getElementById('libraryLangAr')?.classList.toggle('active', lang==='ar');
+  document.getElementById('libraryLangEn')?.classList.toggle('active', lang==='en');
+  renderLibrary(currentLibraryType);
+}
 function renderLibrary(type){
-  type=type||'books'; const lang=currentLang(); setData(P+'library_opened',true);
-  const t={ar:{title:'مكتبة آفاق العربية',sub:'كتب عربية وكتب صوتية عربية مختارة لتطوير الذات، الوعي، إدارة الحياة، والنجاح.',note:'الكتب تفتح داخل التطبيق مباشرة. تم اختيار مصادر مجانية وقانونية أو من الملكية العامة، مع عرض لغة الكتاب تحت كل عنوان.',books:'كتب عربية للقراءة',audio:'كتب صوتية عربية',read:'افتح الكتاب',listen:'تشغيل مباشر',source:'المصدر',language:'لغة الكتاب'},en:{title:'Arabic Afaq Library',sub:'Arabic books and Arabic audiobooks for self-development, awareness, life management, and success.',note:'Books open directly inside the app. Sources are free/legal or public-domain, and the book language is shown under each title.',books:'Arabic Books',audio:'Arabic Audiobooks',read:'Open Book',listen:'Play Inside App',source:'Source',language:'Language'}}[lang];
-  const byId={libraryTitle:t.title,librarySub:t.sub,libraryLegalNote:t.note,libraryBooksTab:t.books,libraryAudioTab:t.audio}; Object.keys(byId).forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=byId[id]; });
-  document.getElementById('libraryBooksTab')?.classList.toggle('active',type==='books'); document.getElementById('libraryAudioTab')?.classList.toggle('active',type==='audio');
-  const list=AFAQ_LIBRARY[type];
-  const html=list.map((b)=>`<div class="library-card arabic-priority"><h3>${ic(type==='audio'?'bubbles':'book-open','icon-sm')} ${b.title}</h3><div class="library-lang-line">${ic('flag','icon-sm')} ${t.language}: ${b.language}</div><p>${b.desc}</p><div class="meta"><span class="library-pill">${b.cat}</span><span class="library-pill">${t.source}: ${b.source}</span><span class="library-pill">${b.author}</span></div><div class="library-actions"><button class="btn btn-primary" onclick="afaqOpenViewer('${b.embedUrl||b.url}','${String(b.title).replace(/'/g,"\'")}')">${type==='audio'?t.listen:t.read}</button></div></div>`).join('');
-  document.getElementById('libraryList').innerHTML=html;
+  type = type || currentLibraryType || 'books';
+  currentLibraryType = type;
+  const uiLang = currentLang();
+  setData(P+'library_opened', true);
+  const t = {
+    ar:{title:'مكتبة آفاق',sub:'كتب وكتب صوتية عربية وإنجليزية مختارة لتطوير الذات والوعي والنجاح.',note:'الكتب تفتح داخل التطبيق مباشرة. تم اختيار مصادر مجانية وقانونية أو من الملكية العامة.',books:'كتب للقراءة',audio:'كتب صوتية',read:'افتح الكتاب',listen:'تشغيل مباشر',source:'المصدر',language:'لغة الكتاب',ar_tab:'📚 العربية',en_tab:'🌍 إنجليزي'},
+    en:{title:'Afaq Library',sub:'Arabic and English books and audiobooks for growth, awareness and success.',note:'Books open directly inside the app. Sources are free, legal, or public-domain.',books:'Books',audio:'Audiobooks',read:'Open Book',listen:'Play Inside App',source:'Source',language:'Language',ar_tab:'📚 Arabic',en_tab:'🌍 English'}
+  }[uiLang];
+
+  const byId={libraryTitle:t.title,librarySub:t.sub,libraryLegalNote:t.note,libraryBooksTab:t.books,libraryAudioTab:t.audio,libraryLangAr:t.ar_tab,libraryLangEn:t.en_tab};
+  Object.keys(byId).forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=byId[id]; });
+
+  document.getElementById('libraryLangAr')?.classList.toggle('active', currentLibraryLang==='ar');
+  document.getElementById('libraryLangEn')?.classList.toggle('active', currentLibraryLang==='en');
+  document.getElementById('libraryBooksTab')?.classList.toggle('active', type==='books');
+  document.getElementById('libraryAudioTab')?.classList.toggle('active', type==='audio');
+
+  const list = (AFAQ_LIBRARY[currentLibraryLang] && AFAQ_LIBRARY[currentLibraryLang][type]) || [];
+  const html = list.map((b)=>`<div class="library-card arabic-priority"><h3>${ic(type==='audio'?'bubbles':'book-open','icon-sm')} ${b.title}</h3><div class="library-lang-line">${ic('flag','icon-sm')} ${t.language}: ${b.language}</div><p>${b.desc}</p><div class="meta"><span class="library-pill">${b.cat}</span><span class="library-pill">${t.source}: ${b.source}</span><span class="library-pill">${b.author}</span></div><div class="library-actions"><button class="btn btn-primary" onclick="afaqOpenViewer('${b.embedUrl||b.url}','${String(b.title).replace(/'/g,"\\'")}')">${type==='audio'?t.listen:t.read}</button></div></div>`).join('');
+  document.getElementById('libraryList').innerHTML = html || `<p class="muted" style="text-align:center;">${uiLang==='ar'?'لا توجد كتب حاليًا بهذا القسم':'No items yet in this section.'}</p>`;
 }
 const afaqOriginalGo = go;
 go = function(name){ afaqOriginalGo(name); if(name==='library') renderLibrary('books'); };
@@ -2578,6 +2629,104 @@ function afaqPomoTick(){ const rem=Math.max(0,Math.ceil((pomoState.endAt-Date.no
 togglePomo = function(){ const btn=document.getElementById('pomoStartBtn'), lang=currentLang(); if(pomoState.active){ clearInterval(pomoState.interval); pomoState.active=false; btn.textContent=lang==='ar'?'ابدأ':'Start'; return; } try{ const C=window.AudioContext||window.webkitAudioContext; if(C){ window.afaqAudioCtx=window.afaqAudioCtx||new C(); window.afaqAudioCtx.resume?.(); }}catch(e){} pomoState.active=true; btn.textContent=lang==='ar'?'إيقاف مؤقت':'Pause'; const rem=pomoState.minutes*60+pomoState.seconds; pomoState.endAt=Date.now()+rem*1000; try{ if(window.AfaqAndroid&&typeof window.AfaqAndroid.startFocusTimer==='function'&&pomoState.mode==='focus') window.AfaqAndroid.startFocusTimer(pomoState.minutes); }catch(e){} clearInterval(pomoState.interval); pomoState.interval=setInterval(afaqPomoTick,1000); afaqPomoTick(); };
 resetPomo = function(){ clearInterval(pomoState.interval); pomoState.active=false; pomoState.minutes=afaqPomoBaseMinutes; pomoState.seconds=0; pomoState.mode='focus'; document.getElementById('pomoStartBtn').textContent=currentLang()==='ar'?'ابدأ':'Start'; try{ window.AfaqAndroid?.stopFocusTimer?.(); }catch(e){} updatePomoUI(); };
 renderPomodoro = function(){ if(!afaqPomoBaseMinutes) afaqPomoBaseMinutes=25; resetPomo(); updatePomoUI(); };
+
+
+/* ===== Afaq v1.2: Book of the Day + Progress Sharing + Smart Notify Engine ===== */
+function afaqDailyBookPick(){
+  const pool = [
+    ...(AFAQ_LIBRARY.ar.books||[]), ...(AFAQ_LIBRARY.ar.audio||[]),
+    ...(AFAQ_LIBRARY.en.books||[]), ...(AFAQ_LIBRARY.en.audio||[])
+  ].filter(b=>b.embedUrl && b.title && !b.title.includes('تصفح') && !b.title.includes('مجموعة') && !b.title.includes('search'));
+  if(!pool.length) return null;
+  const dayIndex = new Date().getFullYear()*400 + new Date().getMonth()*31 + new Date().getDate();
+  return pool[dayIndex % pool.length];
+}
+function renderHomeBookOfDay(){
+  const book = afaqDailyBookPick();
+  const lang = currentLang();
+  const labelEl = document.getElementById('homeBookLabel');
+  const btnEl = document.getElementById('homeBookBtnLabel');
+  if(labelEl) labelEl.textContent = lang==='ar' ? 'كتاب اليوم' : 'Book of the Day';
+  if(btnEl) btnEl.textContent = lang==='ar' ? 'افتح المكتبة' : 'Open Library';
+  if(!book) return;
+  const titleEl = document.getElementById('home-book-title');
+  const descEl = document.getElementById('home-book-desc');
+  if(titleEl) titleEl.textContent = `${book.title} — ${book.author}`;
+  if(descEl) descEl.textContent = book.desc;
+}
+function afaqOpenDailyBook(){
+  const book = afaqDailyBookPick();
+  if(!book){ go('library'); return; }
+  reward(3);
+  afaqOpenViewer(book.embedUrl, book.title);
+}
+const afaqRenderHomeStage2 = renderHome;
+renderHome = function(){ afaqRenderHomeStage2(); renderHomeBookOfDay(); };
+
+function afaqShareProgress(){
+  const lang = currentLang();
+  const snap = afaqStatsSnapshot();
+  const badgeList = afaqBadgeState();
+  const unlocked = badgeList.filter(b=>b.unlocked).length;
+  const text = lang==='ar'
+    ? `🌿 إنجازي في تطبيق آفاق:\n🔥 ${snap.streak} يوم متتالي\n🏅 ${unlocked}/${badgeList.length} شارة مفتوحة\n⭐ ${getData(K.XP,0)} نقطة\n\nحمّل آفاق وابدأ رحلتك في تطوير الحياة!`
+    : `🌿 My Afaq progress:\n🔥 ${snap.streak}-day streak\n🏅 ${unlocked}/${badgeList.length} badges unlocked\n⭐ ${getData(K.XP,0)} XP\n\nDownload Afaq and start your growth journey!`;
+  if(navigator.share){ navigator.share({text}).catch(()=>{}); }
+  else { navigator.clipboard?.writeText(text); showToast(lang==='ar'?'تم نسخ إنجازك، شاركه بالمكان اللي تحب':'Progress copied — share it anywhere!'); }
+}
+const afaqRenderStatsOriginal = renderStats;
+renderStats = function(){
+  afaqRenderStatsOriginal();
+  const lang = currentLang();
+  const el = document.getElementById('shareProgressLabel');
+  if(el) el.textContent = lang==='ar' ? 'مشاركة إنجازك' : 'Share Your Progress';
+};
+
+const SMART_NOTIFY_CHIPS_KEY = P+'smart_notify_chips';
+function afaqGetNotifyChips(){ return getData(SMART_NOTIFY_CHIPS_KEY, {water:true, breathe:true, tips:true, habits:true, library:true}); }
+function afaqToggleNotifyChip(key){
+  const chips = afaqGetNotifyChips();
+  chips[key] = !chips[key];
+  setData(SMART_NOTIFY_CHIPS_KEY, chips);
+  document.getElementById('chip-'+key+'-not')?.classList.toggle('active', chips[key]);
+}
+function afaqApplyNotifyChipsUI(){
+  const chips = afaqGetNotifyChips();
+  Object.keys(chips).forEach(k=>{ document.getElementById('chip-'+k+'-not')?.classList.toggle('active', chips[k]); });
+}
+function afaqSmartNotifyMessage(lang){
+  const chips = afaqGetNotifyChips();
+  const pool = [];
+  if(chips.water) pool.push(lang==='ar' ? {t:'وقت شرب الماء 💧', b:'خذ رشفة ماء الحين، جسمك يستاهل.'} : {t:'Water Break 💧', b:'Take a sip of water right now.'});
+  if(chips.breathe) pool.push(lang==='ar' ? {t:'نفس عميق 🌿', b:'وقف شغلك دقيقة وخذ 3 أنفاس عميقة.'} : {t:'Deep Breath 🌿', b:'Pause and take 3 deep breaths.'});
+  if(chips.tips) pool.push({t: lang==='ar'?'نصيحة آفاق ✨':'Afaq Tip ✨', b: pickRandom(lang==='ar'?AR_DAILY_TIPS:EN_DAILY_TIPS)});
+  if(chips.habits) pool.push(lang==='ar' ? {t:'تذكير عادة ✅', b:'راجع لوحة عاداتك وسجل تقدمك اليوم.'} : {t:'Habit Check ✅', b:'Check your habit board and log today.'});
+  if(chips.library){ const book=afaqDailyBookPick(); if(book) pool.push({t: lang==='ar'?'كتاب اليوم 📖':'Book of the Day 📖', b: `${book.title} — ${book.author}`}); }
+  if(!pool.length) return null;
+  return pickRandom(pool);
+}
+let afaqSmartNotifyInterval = null;
+function startSmartNotifyWatch(){
+  if(afaqSmartNotifyInterval) clearInterval(afaqSmartNotifyInterval);
+  const minutes = parseInt(getData(K.SMART_NOTIFY_INT,"90"), 10) || 90;
+  afaqSmartNotifyInterval = setInterval(()=>{
+    const enabled = getData(K.SMART_NOTIFY, true);
+    if(!enabled) return;
+    const msg = afaqSmartNotifyMessage(currentLang());
+    if(msg) sendAfaqNotification(msg.t, msg.b);
+  }, minutes * 60000);
+}
+const afaqInitReminderOriginal = initReminder;
+initReminder = function(){
+  afaqInitReminderOriginal();
+  afaqApplyNotifyChipsUI();
+  startSmartNotifyWatch();
+};
+const afaqSaveSmartNotifyIntervalOriginal = saveSmartNotifyInterval;
+saveSmartNotifyInterval = function(){
+  afaqSaveSmartNotifyIntervalOriginal();
+  startSmartNotifyWatch();
+};
 
 /* ===== Global Initialization Routine ===== */
 window.addEventListener('DOMContentLoaded', () => {
