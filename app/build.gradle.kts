@@ -8,11 +8,11 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.afaq.life"
+        applicationId = "com.hassansyrn.afaqlife"
         minSdk = 23
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 3
+        versionName = "1.0.2"
     }
 
     compileOptions {
@@ -32,3 +32,4 @@ kotlin {
 dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
 }
+`
