@@ -1,7 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">آفاق | تطوير الحياة</string>
-    <string name="app_name_english">Afaq | Life Development</string>
-    <string name="notification_channel_name">Afaq Reminders</string>
-    <string name="notification_channel_description">Native reminders from Afaq.</string>
+    <string name="app_name">Daily Gold Price</string>
+    <string name="gold_price_24k">Gold 24K</string>
+    <string name="gold_price_22k">Gold 22K</string>
+    <string name="gold_price_21k">Gold 21K</string>
+    <string name="gold_price_18k">Gold 18K</string>
+    <string name="aed">AED</string>
+    <string name="usd">USD</string>
+    <string name="last_updated">Last Updated: %1$s</string>
+    <string name="switch_currency">Switch Currency</string>
+    <string name="uae_title">UAE Gold Market</string>
+    <string name="loading">Loading...</string>
+    <string name="error_loading">Error loading data</string>
+    <string name="retry">Retry</string>
 </resources>

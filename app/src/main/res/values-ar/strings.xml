@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">أسعار الذهب اليومية</string>
+    <string name="gold_price_24k">ذهب عيار 24</string>
+    <string name="gold_price_22k">ذهب عيار 22</string>
+    <string name="gold_price_21k">ذهب عيار 21</string>
+    <string name="gold_price_18k">ذهب عيار 18</string>
+    <string name="aed">درهم</string>
+    <string name="usd">دولار</string>
+    <string name="last_updated">آخر تحديث: %1$s</string>
+    <string name="switch_currency">تغيير العملة</string>
+    <string name="uae_title">سوق الذهب في الإمارات</string>
+    <string name="loading">جاري التحميل...</string>
+    <string name="error_loading">خطأ في تحميل البيانات</string>
+    <string name="retry">إعادة المحاولة</string>
+</resources>
