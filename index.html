@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أسعار الذهب اليومية - الإمارات</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="title">سوق الذهب في الإمارات</h1>
+            <div class="controls">
+                <button id="toggleCurrency">تغيير العملة (درهم/دولار)</button>
+                <button id="toggleLang">English</button>
+            </div>
+        </header>
+
+        <div id="loading" class="loader">جاري التحميل...</div>
+
+        <main id="main-content" class="hidden">
+            <div class="price-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="label" data-en="Gold 24K" data-ar="ذهب عيار 24">ذهب عيار 24</span>
+                        <div class="icon">AU</div>
+                    </div>
+                    <div class="price" id="p24">--</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="label" data-en="Gold 22K" data-ar="ذهب عيار 22">ذهب عيار 22</span>
+                        <div class="icon">AU</div>
+                    </div>
+                    <div class="price" id="p22">--</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="label" data-en="Gold 21K" data-ar="ذهب عيار 21">ذهب عيار 21</span>
+                        <div class="icon">AU</div>
+                    </div>
+                    <div class="price" id="p21">--</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="label" data-en="Gold 18K" data-ar="ذهب عيار 18">ذهب عيار 18</span>
+                        <div class="icon">AU</div>
+                    </div>
+                    <div class="price" id="p18">--</div>
+                </div>
+            </div>
+            <p id="updatedAt">آخر تحديث: --</p>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
