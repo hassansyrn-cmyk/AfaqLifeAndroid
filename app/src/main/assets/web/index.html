@@ -416,6 +416,100 @@
   .library-card.arabic-priority{border-right:4px solid var(--accent);}
   html[lang="en"] .library-card.arabic-priority{border-right:1px solid var(--border);border-left:4px solid var(--accent);}
 
+  /* ===== Light Success Celebration ===== */
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  }
+  .confetti-piece {
+    position: fixed;
+    top: -20px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    z-index: 9999;
+    pointer-events: none;
+    animation: confetti-fall 2.2s linear forwards;
+  }
+
+  /* ===== Interactive Growth Tree and Grid ===== */
+  .home-interactive-tool-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 14px;
+  }
+  .interactive-tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: right;
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  html[lang="en"] .interactive-tool-card {
+    text-align: left;
+    align-items: flex-start;
+  }
+  .interactive-tool-card:hover, .interactive-tool-card:active {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow);
+    border-color: var(--accent);
+  }
+  .interactive-tool-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(212,163,115,0.06) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .interactive-tool-card:hover::after, .interactive-tool-card:active::after {
+    opacity: 1;
+  }
+  .tool-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    background: var(--accent-soft);
+    color: var(--primary);
+    transition: transform 0.3s;
+  }
+  .interactive-tool-card:hover .tool-icon-wrap {
+    transform: rotate(8deg) scale(1.1);
+  }
+  .interactive-tool-card h4 {
+    margin: 0 0 4px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+  .interactive-tool-card p {
+    margin: 0;
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+  @media(max-width:380px){
+    .home-interactive-tool-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 </head>
 <body>
@@ -613,6 +707,12 @@
     </div>
 
     <div class="card">
+      <h3 data-i18n="notification_test_title">اختبار الإشعارات</h3>
+      <p class="muted" data-i18n="notification_test_desc">قم باختبار نظام الإشعارات والتذكير المحلي وحالة الصلاحيات.</p>
+      <button class="btn btn-outline" onclick="go('notification-test')" data-i18n="go_test_notifications">فتح شاشة الاختبار</button>
+    </div>
+
+    <div class="card">
       <h3 data-i18n="legal_disclaimer">التنويه القانوني</h3>
       <p id="legalText" style="display:none;" data-i18n="legal_text">تطبيق آفاق مخصص لتطوير نمط الحياة، التأمل الذاتي، وبناء العادات اليومية. لا يقدم التطبيق تشخيصًا طبيًا أو علاجًا نفسيًا، ولا يغني عن استشارة مختص عند الحاجة.</p>
       <button class="btn btn-outline" id="legalBtn" onclick="showLegal()" data-i18n="show_disclaimer">عرض التنويه</button>
@@ -620,6 +720,87 @@
     <div class="card"><h3 data-i18n="privacy_policy">سياسة الخصوصية</h3><p class="muted" data-i18n="privacy_note">بياناتك تُحفظ محليًا على جهازك فقط، ويمكنك قراءة سياسة الخصوصية الكاملة من الزر أدناه.</p><a class="btn btn-outline privacy-open-btn" href="privacy.html" target="_self" rel="noopener" data-i18n="open_privacy_policy">عرض سياسة الخصوصية الكاملة</a></div>
     <div class="card"><h3 data-i18n="local_data">البيانات المحلية</h3><p class="muted" style="margin-bottom:14px;" data-i18n="local_data_note">يمكنك مسح كل بيانات التطبيق المحفوظة على هذا الجهاز.</p><button class="btn btn-outline" onclick="clearAllData()" data-i18n="clear_data_btn">مسح البيانات المحلية</button></div>
     <div class="card"><h3 data-i18n="about_app">عن التطبيق</h3><p class="muted" data-i18n="app_version">آفاق | تطوير الحياة — الإصدار 3.0.0</p></div>
+  </div>
+
+  <!-- ===== NOTIFICATION TEST SCREEN ===== -->
+  <div class="screen" id="screen-notification-test">
+    <h1 class="hero-title" data-i18n="notification_test_title">اختبار الإشعارات</h1>
+    <p class="hero-sub" data-i18n="notification_test_sub">تأكد من عمل التنبيهات وصلاحيات الوصول على جهازك</p>
+
+    <div class="card">
+      <h3 data-i18n="permission_status">حالة صلاحية الإشعارات</h3>
+      <div id="notif-permission-status" style="font-weight: bold; font-size: 16px; margin-bottom: 12px; color: var(--accent);">مجهول</div>
+      <button class="btn btn-primary btn-block" onclick="requestTestPermission()" data-i18n="request_permission_btn">طلب صلاحية الإشعارات</button>
+    </div>
+
+    <div class="card">
+      <h3 data-i18n="test_actions">عمليات الاختبار</h3>
+      <div class="btn-row" style="flex-direction: column; gap: 10px;">
+        <button class="btn btn-gold btn-block" onclick="triggerImmediateNotification()" data-i18n="test_immediate_btn">إرسال إشعار فوري</button>
+        <button class="btn btn-outline btn-block" onclick="triggerDelayedNotification()" data-i18n="test_delayed_btn">إرسال إشعار بعد 10 ثوانٍ</button>
+      </div>
+      <p class="muted" style="margin-top: 10px;" data-i18n="test_delayed_note">تنبيه: عند الضغط على زر (بعد 10 ثوانٍ)، يمكنك إغلاق التطبيق فوراً للتأكد من وصول التنبيه والتطبيق مغلق!</p>
+    </div>
+  </div>
+
+  <!-- ===== DECISION WHEEL SCREEN ===== -->
+  <div class="screen" id="screen-decision-wheel">
+    <h1 class="hero-title" data-i18n="decision_wheel_title">عجلة القرارات</h1>
+    <p class="hero-sub" data-i18n="decision_wheel_sub">اترك القرار للعجلة لتنظيم حيرتك بين الخيارات</p>
+
+    <div class="card" style="text-align: center;">
+      <div style="position: relative; display: inline-block; margin-bottom: 16px;">
+        <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 18px solid var(--accent); z-index: 10;"></div>
+        <canvas id="decisionWheelCanvas" width="280" height="280" style="background: transparent; border-radius: 50%; box-shadow: var(--shadow);"></canvas>
+      </div>
+
+      <button class="btn btn-gold btn-block" id="spinWheelBtn" onclick="spinDecisionWheel()" data-i18n="spin_btn">أطلق العجلة! 🌀</button>
+    </div>
+
+    <div class="card">
+      <h3 data-i18n="wheel_options">خياراتك في العجلة</h3>
+      <textarea id="wheelOptionsInput" placeholder="اكتب الخيارات هنا، خيار في كل سطر..." style="min-height: 80px; margin-bottom: 12px;"></textarea>
+      <button class="btn btn-outline btn-block btn-sm" onclick="saveWheelOptions()" data-i18n="update_wheel_btn">تحديث العجلة</button>
+    </div>
+  </div>
+
+  <!-- ===== 7-DAY CHALLENGE SCREEN ===== -->
+  <div class="screen" id="screen-challenge-7">
+    <h1 class="hero-title" data-i18n="challenge_7_title">تحدي 7 أيام</h1>
+    <p class="hero-sub" data-i18n="challenge_7_sub">مسار يومي ملتزم لمدة أسبوع لبناء انضباط حديدي</p>
+
+    <div id="challenge7DaysProgress" class="card" style="background: linear-gradient(160deg, var(--surface), var(--accent-soft)); text-align: center;">
+      <h3 style="justify-content: center;" id="challenge7ProgressTitle">تقدم التحدي: 0/7 أيام</h3>
+      <div class="progress-track" style="margin-top: 10px; margin-bottom: 14px;"><div class="progress-fill" id="challenge7ProgressFill" style="width:0%"></div></div>
+    </div>
+
+    <div id="challenge7DaysGrid" style="display: flex; flex-direction: column; gap: 12px;"></div>
+  </div>
+
+  <!-- ===== HABIT GENERATOR SCREEN ===== -->
+  <div class="screen" id="screen-habit-generator">
+    <h1 class="hero-title" data-i18n="habit_generator_title">مولد العادات</h1>
+    <p class="hero-sub" data-i18n="habit_generator_sub">اكتشف عادات عملية مجهزة بحلقات المحفز والمكافأة وأضفها لعاداتك فوراً</p>
+
+    <div class="card" style="text-align: center;">
+      <p style="margin-bottom: 12px; font-weight: 700;" data-i18n="select_gen_category">اختر المجال الذي تود التركيز عليه:</p>
+      <div class="chip-row" style="justify-content: center; margin-bottom: 16px;" id="generatorCategoryChips">
+        <button class="btn-chip active" id="gen-cat-health" onclick="selectGeneratorCategory('health')" data-i18n="health_field">الصحة والجسد</button>
+        <button class="btn-chip" id="gen-cat-focus" onclick="selectGeneratorCategory('focus')" data-i18n="focus_field">التركيز والعمل</button>
+        <button class="btn-chip" id="gen-cat-calm" onclick="selectGeneratorCategory('calm')" data-i18n="calm_field">الهدوء والوعي</button>
+      </div>
+      <button class="btn btn-gold btn-block" onclick="generateRandomHabit()" data-i18n="generate_habit_btn">توليد عادة جديدة 🎲</button>
+    </div>
+
+    <div class="card accented" id="generatedHabitCard" style="display:none; text-align: right;">
+      <h3 style="color: var(--primary); font-size: 16px;" id="genHabitName">اسم العادة</h3>
+      <div class="habit-loop" style="margin: 14px 0;">
+        <div class="loop-box"><b data-i18n="cue">المحفز</b><span id="genHabitCue">بعد القهوة</span></div>
+        <div class="loop-box"><b data-i18n="routine_act">الفعل</b><span id="genHabitAction">قراءة صفحة</span></div>
+        <div class="loop-box"><b data-i18n="reward">المكافأة</b><span id="genHabitReward">كوب قهوة</span></div>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="addGeneratedToCustomHabits()" data-i18n="add_generated_btn">إضافة هذه العادة لجدولي ✅</button>
+    </div>
   </div>
 
   <!-- ===== DAILY TIP ===== -->
@@ -970,6 +1151,31 @@ const I18N_DICT = {
     long_term_growth: 'النمو طويل المدى', my_goals: 'أهدافي', my_goals_sub: 'أهداف كبيرة مقسّمة لخطوات',
     weekly_review: 'المراجعة الأسبوعية', weekly_review_sub: 'وقفة أسبوعية مع نفسك', reading_list: 'قائمة القراءة',
     reading_list_sub: 'تابع كتب تطوير الذات',
+    decision_wheel_title: 'عجلة القرارات',
+    decision_wheel_sub: 'اترك القرار للعجلة لتنظيم حيرتك بين الخيارات',
+    spin_btn: 'أطلق العجلة! 🌀',
+    wheel_options: 'خياراتك في العجلة',
+    update_wheel_btn: 'تحديث العجلة',
+    challenge_7_title: 'تحدي 7 أيام',
+    challenge_7_sub: 'مسار يومي ملتزم لمدة أسبوع لبناء انضباط حديدي',
+    habit_generator_title: 'مولد العادات',
+    habit_generator_sub: 'اكتشف عادات عملية مجهزة بحلقات المحفز والمكافأة وأضفها لعاداتك فوراً',
+    select_gen_category: 'اختر المجال الذي تود التركيز عليه:',
+    health_field: 'الصحة والجسد',
+    focus_field: 'التركيز والعمل',
+    calm_field: 'الهدوء والوعي',
+    generate_habit_btn: 'توليد عادة جديدة 🎲',
+    add_generated_btn: 'إضافة هذه العادة لجدولي ✅',
+    notification_test_title: 'اختبار الإشعارات',
+    notification_test_desc: 'قم باختبار نظام الإشعارات والتذكير المحلي وحالة الصلاحيات.',
+    go_test_notifications: 'فتح شاشة الاختبار',
+    notification_test_sub: 'تأكد من عمل التنبيهات وصلاحيات الوصول على جهازك',
+    permission_status: 'حالة صلاحية الإشعارات',
+    request_permission_btn: 'طلب صلاحية الإشعارات',
+    test_actions: 'عمليات الاختبار',
+    test_immediate_btn: 'إرسال إشعار فوري',
+    test_delayed_btn: 'إرسال إشعار بعد 10 ثوانٍ',
+    test_delayed_note: 'تنبيه: عند الضغط على زر (بعد 10 ثوانٍ)، يمكنك إغلاق التطبيق فوراً للتأكد من وصول التنبيه والتطبيق مغلق!',
     afaq_library: 'مكتبة آفاق', afaq_library_sub: 'كتب وكتب صوتية لتطوير الذات والنجاح', experience_onboarding: 'تهيئة تجربتك', experience_onboarding_sub: 'اختر مجالاتك وأول هدف لك',
     custom_habit_builder: 'بناء عادة مخصصة', custom_habit_builder_sub: 'حلقة العادة: محفز، فعل، مكافأة', life_areas: 'مجالات الحياة',
     life_areas_sub: 'تقييم شامل للمجالات الأساسية', tips_library: 'مكتبة النصائح', tips_library_sub: '30+ نصيحة عملية حسب التصنيف',
@@ -1037,6 +1243,31 @@ const I18N_DICT = {
     long_term_growth: 'Long-term Growth', my_goals: 'My Goals', my_goals_sub: 'Big goals divided into steps',
     weekly_review: 'Weekly Review', weekly_review_sub: 'A weekly pause with yourself', reading_list: 'Reading List',
     reading_list_sub: 'Track self-development books',
+    decision_wheel_title: 'Decision Wheel',
+    decision_wheel_sub: 'Let the wheel make a random choice to resolve your indecision',
+    spin_btn: 'Spin the Wheel! 🌀',
+    wheel_options: 'Your Options on the Wheel',
+    update_wheel_btn: 'Update Wheel',
+    challenge_7_title: '7-Day Challenge',
+    challenge_7_sub: 'A daily committed path for a week to build solid discipline',
+    habit_generator_title: 'Habit Generator',
+    habit_generator_sub: 'Discover practical habits designed with cue and reward loops and add them instantly',
+    select_gen_category: 'Choose your focus area:',
+    health_field: 'Health & Body',
+    focus_field: 'Focus & Career',
+    calm_field: 'Calm & Awareness',
+    generate_habit_btn: 'Generate a Habit 🎲',
+    add_generated_btn: 'Add Habit to My Board ✅',
+    notification_test_title: 'Notification Test',
+    notification_test_desc: 'Test the local notification & reminder system and check permission status.',
+    go_test_notifications: 'Open Notification Test',
+    notification_test_sub: 'Verify alerts and permissions on your device',
+    permission_status: 'Notification Permission Status',
+    request_permission_btn: 'Request Notification Permission',
+    test_actions: 'Test Actions',
+    test_immediate_btn: 'Send Immediate Notification',
+    test_delayed_btn: 'Send Notification after 10 seconds',
+    test_delayed_note: 'Note: After clicking (after 10 seconds), you can close the app immediately to verify notifications work when closed!',
     afaq_library: 'Afaq Library', afaq_library_sub: 'Books and audiobooks for growth and success', experience_onboarding: 'Setup Experience', experience_onboarding_sub: 'Choose your areas and first goal',
     custom_habit_builder: 'Custom Habit Builder', custom_habit_builder_sub: 'Habit loop: cue, routine, reward', life_areas: 'Life Areas',
     life_areas_sub: 'Comprehensive assessment of core areas', tips_library: 'Tips Library', tips_library_sub: '30+ practical tips by category',
@@ -1185,8 +1416,8 @@ const DEFAULT_ROUTINE_EN = {
 };
 
 const SCREEN_TITLES = {
-  ar: {home:'آفاق', tools:'الأدوات', settings:'الإعدادات', 'daily-tip':'نصيحة اليوم', affirmations:'التأكيدات اليومية', mood:'مؤشر اليوم', breathing:'تمرين التنفس', reflection:'سؤال للتأمل', gratitude:'دفتر الامتنان', challenge:'تحدي صغير', wheel:'عجلة الحياة', pomodoro:'مؤقت التركيز', water:'متتبع الماء', habit:'لوحة العادات', matrix:'مصفوفة الأولويات', routine:'روتين يومي', journal:'المفكرة اليومية', goals:'أهدافي', weekly:'المراجعة الأسبوعية', reading:'قائمة القراءة', stats:'إحصائياتك', achievements:'إنجازاتك', onboarding:'تهيئة تجربتك', 'habit-builder':'بناء عادة مخصصة', 'life-areas':'مجالات الحياة', 'tips-library':'مكتبة النصائح', programs:'برامج 14 يوم'},
-  en: {home:'Afaq Home', tools:'Growth Tools', settings:'Settings Panel', 'daily-tip':'Daily Insight', affirmations:'Affirmations', mood:'Mood Indicator', breathing:'Breathing Zen', reflection:'Self Reflection', gratitude:'Gratitude Ledger', challenge:'Micro Challenge', wheel:'Wheel of Life', pomodoro:'Focus Matrix', water:'Hydration Tracker', habit:'Habit Board', matrix:'Eisenhower Matrix', routine:'Daily Routines', journal:'Personal Diary', goals:'Strategic Goals', weekly:'Weekly Audit', reading:'Reading Archive', stats:'Analytics Dashboard', achievements:'Milestones', onboarding:'Onboarding Setup', 'habit-builder':'Habit Loop Architect', 'life-areas':'Life Spheres', 'tips-library':'Knowledge Vault', programs:'14-Day Micro-Courses'}
+  ar: {home:'آفاق', tools:'الأدوات', settings:'الإعدادات', 'daily-tip':'نصيحة اليوم', affirmations:'التأكيدات اليومية', mood:'مؤشر اليوم', breathing:'تمرين التنفس', reflection:'سؤال للتأمل', gratitude:'دفتر الامتنان', challenge:'تحدي صغير', wheel:'عجلة الحياة', pomodoro:'مؤقت التركيز', water:'متتبع الماء', habit:'لوحة العادات', matrix:'مصفوفة الأولويات', routine:'روتين يومي', journal:'المفكرة اليومية', goals:'أهدافي', weekly:'المراجعة الأسبوعية', reading:'قائمة القراءة', stats:'إحصائياتك', achievements:'إنجازاتك', onboarding:'تهيئة تجربتك', 'habit-builder':'بناء عادة مخصصة', 'life-areas':'مجالات الحياة', 'tips-library':'مكتبة النصائح', programs:'برامج 14 يوم', 'notification-test':'اختبار الإشعارات', 'decision-wheel':'عجلة القرارات', 'challenge-7':'تحدي 7 أيام', 'habit-generator':'مولد العادات'},
+  en: {home:'Afaq Home', tools:'Growth Tools', settings:'Settings Panel', 'daily-tip':'Daily Insight', affirmations:'Affirmations', mood:'Mood Indicator', breathing:'Breathing Zen', reflection:'Self Reflection', gratitude:'Gratitude Ledger', challenge:'Micro Challenge', wheel:'Wheel of Life', pomodoro:'Focus Matrix', water:'Hydration Tracker', habit:'Habit Board', matrix:'Eisenhower Matrix', routine:'Daily Routines', journal:'Personal Diary', goals:'Strategic Goals', weekly:'Weekly Audit', reading:'Reading Archive', stats:'Analytics Dashboard', achievements:'Milestones', onboarding:'Onboarding Setup', 'habit-builder':'Habit Loop Architect', 'life-areas':'Life Spheres', 'tips-library':'Knowledge Vault', programs:'14-Day Micro-Courses', 'notification-test':'Notification Test', 'decision-wheel':'Decision Wheel', 'challenge-7':'7-Day Challenge', 'habit-generator':'Habit Generator'}
 };
 
 /* ===== Navigation Core Engine ===== */
@@ -1219,12 +1450,31 @@ function go(name){
     goals:renderGoals, weekly:renderWeekly, reading:renderReading, 
     stats:renderStats, achievements:renderAchievements, onboarding:renderOnboarding, 
     'habit-builder':renderHabitBuilder, 'life-areas':renderLifeAreas, 
-    'tips-library':renderTipsLibrary, programs:renderPrograms
+    'tips-library':renderTipsLibrary, programs:renderPrograms,
+    'notification-test':renderNotificationTest,
+    'decision-wheel':renderDecisionWheel,
+    'challenge-7':renderChallenge7,
+    'habit-generator':generateRandomHabit
   };
   if(renderers[name]) renderers[name]();
 }
 
 function goBack(){ if(navStack.length>1){ navStack.pop(); showScreen(navStack[navStack.length-1]); } }
+
+window.onAndroidBack = function() {
+  if (navStack.length > 1) {
+    goBack();
+  } else {
+    const currentTab = navStack[0];
+    if (currentTab === 'home') {
+      if (window.AfaqAndroid && typeof window.AfaqAndroid.exitApp === 'function') {
+        window.AfaqAndroid.exitApp();
+      }
+    } else {
+      goTab('home');
+    }
+  }
+};
 function goTab(tab){ navStack=[tab]; showScreen(tab); document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab)); if(tab==='home') renderHome(); setTimeout(translateVisibleScreen,0); }
 
 let toastTimer;
@@ -1343,7 +1593,7 @@ function logActivity(){
   setData(K.ACTIVITY_LOG, log);
   updateStreakOnce();
 }
-function reward(xp){ logActivity(); addXP(xp); }
+function reward(xp){ logActivity(); addXP(xp); if (typeof afaqTriggerConfetti === 'function') afaqTriggerConfetti(); }
 function updateHeroStats(){
   const lang = currentLang();
   const xp=getData(K.XP,0); const {level, progress}=levelInfo(xp);
@@ -1405,6 +1655,23 @@ function initReminder(){
   const sni = getData(K.SMART_NOTIFY_INT, "90");
   const sniv = document.getElementById('smartNotifyInterval'); if(sniv) sniv.value = sni;
 }
+function updateAndroidDailyReminder() {
+  if (window.AfaqAndroid) {
+    const r = getData(K.REMINDER, {enabled:false, time:'20:00'});
+    window.AfaqAndroid.cancelRepeatingReminder();
+    if (r.enabled && r.time) {
+      const parts = r.time.split(':');
+      if (parts.length === 2) {
+        const hour = parseInt(parts[0], 10);
+        const minute = parseInt(parts[1], 10);
+        const title = currentLang() === 'ar' ? 'آفاق يذكّرك 🌿' : 'Afaq Reminder 🌿';
+        const body = currentLang() === 'ar' ? 'خذ لحظة لنفسك اليوم' : 'Take a quiet moment for yourself today.';
+        window.AfaqAndroid.scheduleRepeatingReminder(hour, minute, title, body);
+      }
+    }
+  }
+}
+
 function toggleReminder(){
   const enabled = document.getElementById('reminderToggle').checked;
   const r = getData(K.REMINDER, {enabled:false, time:'20:00'});
@@ -1418,11 +1685,13 @@ function toggleReminder(){
     if(reminderInterval) clearInterval(reminderInterval);
     showToast(currentLang() === 'ar' ? 'تم إيقاف التذكير' : 'Reminder Disabled');
   }
+  updateAndroidDailyReminder();
 }
 function saveReminderTime(){
   const r = getData(K.REMINDER, {enabled:false, time:'20:00'});
   r.time = document.getElementById('reminderTime').value;
   setData(K.REMINDER, r);
+  updateAndroidDailyReminder();
 }
 function sendAfaqNotification(title, body){
   if(window.AfaqAndroid && typeof window.AfaqAndroid.showNotification === 'function'){
@@ -1886,8 +2155,21 @@ function triggerWaterCup(index){
 /* ===== Habit Board System ===== */
 function renderHabitScreen(){
   const lang = currentLang();
-  const pool = HABITS_DATA[lang];
   const selected = getData(K.HABITS_SEL, ['water', 'reading']);
+  const customList = getData(K.CUSTOM_HABITS, []);
+
+  const pool = [...HABITS_DATA[lang]];
+  customList.forEach((ch, index) => {
+    pool.push({
+      id: 'custom_' + index,
+      label: ch.name,
+      icon: 'star',
+      isCustom: true,
+      cue: ch.cue,
+      reward: ch.reward,
+      category: ch.category
+    });
+  });
   
   // رندرة قائمة الاختيارات العلوية
   let pickHtml = '';
@@ -1904,17 +2186,57 @@ function renderHabitScreen(){
   // رندرة لوحة أيام الأسبوع التفاعلية لكل عادة منتقاة
   let boardHtml = '';
   const prog = getData(K.HABIT_PROG, {});
+
   selected.forEach(hId => {
     const meta = pool.find(item => item.id === hId) || pool[0];
-    boardHtml += `<div class="habit-board-row"><div class="hb-label">${ic(meta.icon,'icon-sm')} <span>${meta.label}</span></div><div class="hb-days">`;
+    if (!meta) return;
+
+    // حساب السلسلة المتتالية Streak
+    let streak = 0;
+    const days = (prog[hId] && prog[hId].days) || {};
+    for (let i = 0; i < 365; i++) {
+      const key = dateKeyOffset(i);
+      if (days[key]) {
+        streak++;
+      } else {
+        if (i === 0) continue;
+        break;
+      }
+    }
+
+    boardHtml += `<div class="habit-board-card" style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow-soft);">`;
+    boardHtml += `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; font-weight: bold; color: var(--primary-dark);">
+          ${ic(meta.icon,'icon-sm')} <span>${meta.label}</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: bold; color: var(--accent);">
+          ${ic('flame','icon-sm')} ${lang==='ar'?'سلسلة:':'Streak:'} ${streak}
+        </div>
+      </div>
+    `;
+
+    boardHtml += `<div class="hb-days" style="display: flex; gap: 6px;">`;
     for(let i=6; i>=0; i--){
       const kOffset = dateKeyOffset(i);
-      const isDone = (prog[hId] && prog[hId].days && prog[hId].days[kOffset]) ? 'done' : '';
+      const isDone = days[kOffset] ? 'done' : '';
       const isToday = i === 0 ? 'today' : '';
-      boardHtml += `<div class="hb-day ${isDone} ${isToday}" onclick="toggleHabitsLogDay('${hId}','${kOffset}')">${isToday?'★':dayLabel(i)}</div>`;
+      boardHtml += `<div class="hb-day ${isDone} ${isToday}" style="flex:1; aspect-ratio:1; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:11px; cursor:pointer;" onclick="toggleHabitsLogDay('${hId}','${kOffset}')">${isToday?'★':dayLabel(i)}</div>`;
     }
-    boardHtml += `</div></div>`;
+    boardHtml += `</div>`;
+
+    if (meta.isCustom && meta.cue) {
+      boardHtml += `
+        <div style="margin-top: 10px; padding-top: 8px; border-top: 1.5px dashed var(--border); font-size: 11px; color: var(--text-secondary); display: flex; flex-direction: column; gap: 2px;">
+          <div><b>${lang==='ar'?'المحفز:':'Cue:'}</b> ${meta.cue}</div>
+          <div><b>${lang==='ar'?'المكافأة:':'Reward:'}</b> ${meta.reward || (lang==='ar'?'علامة إنجاز':'Checkmark')}</div>
+        </div>
+      `;
+    }
+
+    boardHtml += `</div>`;
   });
+
   document.getElementById('habitBoardWrap').innerHTML = boardHtml;
 }
 function toggleSelectHabitRow(id){
@@ -2543,6 +2865,80 @@ function afaqMotivation(lang, streak){
   const en=['Today’s consistency builds tomorrow’s stronger you.','Every check mark proves you kept going.','A small step today beats waiting for a perfect day.','You are building a habit, not just a number.'];
   return (lang==='ar'?ar:en)[new Date().getDate()%4];
 }
+function afaqGetGrowthTreeSVG(level, progress) {
+  let svg = `<svg viewBox="0 0 200 200" style="width:140px; height:140px; display:block; margin:0 auto;" class="growth-tree-svg">`;
+  svg += `<style>
+    .trunk { stroke: #5D4037; stroke-width: 6; stroke-linecap: round; fill: none; transition: all 0.5s ease; }
+    .branch { stroke: #5D4037; stroke-width: 4; stroke-linecap: round; fill: none; transition: all 0.5s ease; }
+    .leaf { fill: #4A6760; transition: all 0.5s ease; transform-origin: center; }
+    .leaf-gold { fill: #D4A373; transition: all 0.5s ease; transform-origin: center; }
+    .pot { fill: #8D6E63; }
+    .pot-rim { fill: #A1887F; }
+    @keyframes pulse-fruit {
+      0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(212,163,115,0.5)); }
+      50% { transform: scale(1.15); filter: drop-shadow(0 0 6px rgba(212,163,115,0.9)); }
+      100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(212,163,115,0.5)); }
+    }
+    .glowing-fruit { animation: pulse-fruit 2.5s infinite ease-in-out; }
+  </style>`;
+
+  svg += `<path class="pot" d="M 80 175 L 120 175 L 125 195 L 75 195 Z" />`;
+  svg += `<rect class="pot-rim" x="72" y="171" width="56" height="5" rx="2" />`;
+
+  if (level === 1) {
+    svg += `<path class="trunk" d="M 100 172 Q 98 155 102 142" />`;
+    svg += `<path class="leaf" d="M 102 142 Q 85 135 90 148 Q 98 148 102 142" />`;
+    svg += `<path class="leaf" d="M 102 142 Q 115 130 110 145 Q 104 148 102 142" />`;
+  } else if (level === 2) {
+    svg += `<path class="trunk" d="M 100 172 Q 96 145 100 120" />`;
+    svg += `<path class="branch" d="M 98 145 Q 85 135 78 138" />`;
+    svg += `<path class="leaf" d="M 78 138 Q 68 130 75 142 Q 80 142 78 138" />`;
+    svg += `<path class="branch" d="M 99 135 Q 115 125 122 130" />`;
+    svg += `<path class="leaf" d="M 122 130 Q 130 120 125 135 Q 118 135 122 130" />`;
+    svg += `<path class="leaf" d="M 100 120 Q 90 105 95 115 Z" />`;
+    svg += `<path class="leaf" d="M 100 120 Q 110 105 105 115 Z" />`;
+  } else if (level === 3) {
+    svg += `<path class="trunk" style="stroke-width:8;" d="M 100 172 C 95 140 105 110 100 90" />`;
+    svg += `<path class="branch" d="M 98 135 Q 80 125 65 130" />`;
+    svg += `<path class="leaf" d="M 65 130 Q 55 120 62 135 Z" />`;
+    svg += `<path class="branch" d="M 101 125 Q 120 110 135 115" />`;
+    svg += `<path class="leaf" d="M 135 115 Q 145 105 138 120 Z" />`;
+    svg += `<path class="branch" d="M 99 105 Q 80 90 85 75" />`;
+    svg += `<path class="leaf" d="M 85 75 Q 75 65 88 80 Z" />`;
+    svg += `<path class="leaf" d="M 100 90 C 85 75 115 75 100 90" />`;
+    svg += `<path class="leaf" d="M 100 90 Q 90 70 100 70 Q 110 70 100 90" />`;
+  } else if (level === 4) {
+    svg += `<path class="trunk" style="stroke-width:10;" d="M 100 172 C 92 130 108 95 100 75" />`;
+    svg += `<path class="branch" style="stroke-width:5;" d="M 97 125 Q 70 115 50 115" />`;
+    svg += `<circle cx="50" cy="115" r="14" fill="#4A6760" opacity="0.85" />`;
+    svg += `<circle cx="50" cy="115" r="5" class="glowing-fruit" fill="#D4A373" />`;
+    svg += `<path class="branch" style="stroke-width:5;" d="M 102 115 Q 130 100 145 105" />`;
+    svg += `<circle cx="145" cy="105" r="14" fill="#4A6760" opacity="0.85" />`;
+    svg += `<circle cx="145" cy="105" r="5" class="glowing-fruit" fill="#D4A373" />`;
+    svg += `<path class="branch" d="M 100 90 Q 80 75 80 60" />`;
+    svg += `<circle cx="80" cy="60" r="16" fill="#4A6760" opacity="0.85" />`;
+    svg += `<circle cx="100" cy="60" r="18" fill="#4A6760" opacity="0.85" />`;
+    svg += `<circle cx="120" cy="65" r="15" fill="#4A6760" opacity="0.85" />`;
+    svg += `<circle cx="100" cy="55" r="6" class="glowing-fruit" fill="#D4A373" />`;
+  } else {
+    svg += `<path class="trunk" style="stroke-width:12; stroke: #3e2723;" d="M 100 172 C 90 120 110 80 100 55" />`;
+    svg += `<circle cx="100" cy="55" r="28" fill="#3D5A53" />`;
+    svg += `<circle cx="70" cy="70" r="24" fill="#4A6760" />`;
+    svg += `<circle cx="130" cy="70" r="24" fill="#4A6760" />`;
+    svg += `<circle cx="65" cy="105" r="20" fill="#6C8981" />`;
+    svg += `<circle cx="135" cy="105" r="20" fill="#6C8981" />`;
+    svg += `<circle cx="100" cy="45" r="8" class="glowing-fruit" fill="#D4A373" />`;
+    svg += `<circle cx="70" cy="65" r="7" class="glowing-fruit" fill="#E7C39B" />`;
+    svg += `<circle cx="130" cy="65" r="7" class="glowing-fruit" fill="#E7C39B" />`;
+    svg += `<circle cx="65" cy="100" r="6" class="glowing-fruit" fill="#D4A373" />`;
+    svg += `<circle cx="135" cy="100" r="6" class="glowing-fruit" fill="#D4A373" />`;
+    svg += `<polygon points="100,15 103,24 112,24 105,29 107,38 100,32 93,38 95,29 88,24 97,24" fill="#D4A373" class="glowing-fruit" />`;
+  }
+
+  svg += `</svg>`;
+  return svg;
+}
+
 function renderAfaqDailyDashboard(){
   const lang=currentLang(); afaqMarkDailyVisit(); const snap=afaqStatsSnapshot(); const title=afaqCurrentTitle(snap,lang); const next=afaqNextReward(snap,lang);
   if(typeof updateHeroStats==='function') updateHeroStats();
@@ -2550,8 +2946,107 @@ function renderAfaqDailyDashboard(){
   const cal=Array.from({length:30},(_,idx)=>{ const off=29-idx, key=dateKeyOffset(off), done=!!visits[key], today=off===0; return `<div class="daily-day ${done?'done':''} ${today?'today':''}" title="${key}">${done?'':new Date(key).getDate()}</div>`; }).join('');
   const unlocked=AFAQ_BADGES[lang].filter(b=>b.check(snap));
   const preview=AFAQ_BADGES[lang].slice(0,6).map(b=>`<div class="reward-mini ${b.check(snap)?'unlocked':''}">${ic(b.icon,'icon-sm')}<div class="r-title">${b.title}</div><div class="r-desc">${b.desc}</div></div>`).join('');
-  const labels={ar:{daily:'لوحة حضورك اليومية',days:'أيام متتالية',longest:'أطول سلسلة',title:'لقبك الحالي',next:'الجائزة القادمة',tools:'أدواتك اليومية',focus:'مؤقت التركيز',water:'شرب الماء',breath:'تنفس وهدوء',library:'مكتبة آفاق العربية',focusSub:'جلسة تركيز قصيرة',waterSub:'تابع أكواب اليوم',breathSub:'دقيقة تعيد الاتزان',librarySub:'كتب وصوتيات عربية'},en:{daily:'Your daily check-in board',days:'day streak',longest:'Longest streak',title:'Current title',next:'Next reward',tools:'Your Daily Tools',focus:'Focus Timer',water:'Water',breath:'Breathing',library:'Arabic Afaq Library',focusSub:'Start a short focus session',waterSub:'Track today’s cups',breathSub:'One minute to reset',librarySub:'Arabic books and audio'}}[lang];
-  const html=`<div id="afaqHomeUpgrade"><div id="afaqDailyDashboard" class="daily-dashboard-card"><div class="daily-dashboard-head"><div class="daily-streak-orb"><div class="num">${snap.streak}</div><div class="txt">${labels.days}</div></div><div class="daily-dashboard-copy"><h3>${labels.daily}</h3><p>${afaqMotivation(lang,snap.streak)}</p><span class="daily-title-pill">${ic('medal','icon-sm')} ${labels.title}: ${title}</span></div></div><div class="daily-calendar">${cal}</div><div class="daily-progress-row"><span class="muted">${labels.longest}: ${snap.longest}</span><span class="muted">${unlocked.length}/${AFAQ_BADGES[lang].length}</span></div><div class="next-reward-box"><div class="daily-progress-row"><b style="font-size:13px">${labels.next}</b><span class="muted">${Math.round(next.pct)}%</span></div><p class="muted" style="margin:6px 0 8px">${next.label}</p><div class="progress-track"><div class="progress-fill" style="width:${next.pct}%"></div></div></div><div class="reward-preview-grid">${preview}</div></div><div class="section-heading">${labels.tools}</div><div id="afaqHomeTools" class="home-tool-grid"><div class="home-tool-card" onclick="go('pomodoro')"><div class="tool-bubble">${ic('stopwatch')}</div><div><h4>${labels.focus}</h4><p>${labels.focusSub}</p></div></div><div class="home-tool-card" onclick="go('water')"><div class="tool-bubble">${ic('droplet')}</div><div><h4>${labels.water}</h4><p>${labels.waterSub}</p></div></div><div class="home-tool-card" onclick="go('breathing')"><div class="tool-bubble">${ic('bubbles')}</div><div><h4>${labels.breath}</h4><p>${labels.breathSub}</p></div></div><div class="home-tool-card" onclick="go('library')"><div class="tool-bubble">${ic('book-open')}</div><div><h4>${labels.library}</h4><p>${labels.librarySub}</p></div></div></div></div>`;
+  const labels={
+    ar:{
+      daily:'لوحة حضورك اليومية',days:'أيام متتالية',longest:'أطول سلسلة',title:'لقبك الحالي',next:'الجائزة القادمة',tools:'أدواتك التفاعلية السريعة',
+      focus:'مؤقت التركيز',water:'شرب الماء',breath:'تنفس وهدوء',library:'مكتبة آفاق',
+      habits:'لوحة العادات',gratitude:'دفتر الامتنان',decision:'عجلة القرارات',challenge:'تحدي 7 أيام',
+      focusSub:'جلسة تركيز قصيرة',waterSub:'تابع أكواب اليوم',breathSub:'دقيقة تعيد الاتزان',librarySub:'كتب وصوتيات مجانية',
+      habitsSub:'أنجز عاداتك وسجلها',gratitudeSub:'دون نعمك اليومية',decisionSub:'اختر قراراً عشوائياً',challengeSub:'تحدي يومي متكامل'
+    },
+    en:{
+      daily:'Your daily check-in board',days:'day streak',longest:'Longest streak',title:'Current title',next:'Next reward',tools:'Interactive Quick-Access Hub',
+      focus:'Focus Timer',water:'Water',breath:'Breathing',library:'Afaq Library',
+      habits:'Habits Tracker',gratitude:'Gratitude Ledger',decision:'Decision Wheel',challenge:'7-Day Challenge',
+      focusSub:'Start a focus session',waterSub:'Track today’s cups',breathSub:'One minute to reset',librarySub:'Free books and audio',
+      habitsSub:'Achieve your weekly habits',gratitudeSub:'Write down your blessings',decisionSub:'Spin for a random decision',challengeSub:'Daily step-by-step challenges'
+    }
+  }[lang];
+
+  const {level, progress}=levelInfo(snap.xp);
+
+  const html=`<div id="afaqHomeUpgrade">
+    <!-- ===== Elegant Personal Growth Tree Card ===== -->
+    <div class="card" style="background: linear-gradient(160deg, var(--surface), var(--bg)); text-align: center; border-radius: var(--radius-lg); position: relative; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border); padding: 22px; margin-bottom: 16px;">
+      <div style="margin: 0 auto 12px; position: relative; width: 140px; height: 140px;">
+        ${afaqGetGrowthTreeSVG(level, progress)}
+      </div>
+      <h3 style="justify-content: center; margin: 0 0 6px; font-family: 'Cairo', sans-serif; font-size: 18px; color: var(--primary-dark);">
+        ${lang === 'ar' ? 'شجرة نموك الشخصية 🌿' : 'Your Personal Growth Tree 🌿'}
+      </h3>
+      <p class="muted" style="font-size: 13px; line-height: 1.5; max-width: 320px; margin: 0 auto 14px;">
+        ${lang === 'ar'
+          ? `أنت في المستوى ${level}! تنمو شجرتك وتثمر أوراقاً وزهوراً ذهبية كلما سجلت تقدماً في عاداتك اليومية.`
+          : `You are at Level ${level}! Your tree grows and blooms golden fruits as you log your daily habits.`}
+      </p>
+      <div style="display: flex; gap: 8px; justify-content: center; align-items: center; background: var(--surface); padding: 8px 16px; border-radius: 99px; border: 1px solid var(--border); display: inline-flex;">
+        <span style="font-weight: bold; color: var(--accent); font-family: 'Cairo';">${snap.xp} XP</span>
+        <span style="color: var(--text-secondary);">|</span>
+        <span style="font-weight: 700; color: var(--primary);">${lang === 'ar' ? `المستوى ${level}` : `Level ${level}`}</span>
+      </div>
+    </div>
+
+    <!-- ===== Daily Attendance Dashboard ===== -->
+    <div id="afaqDailyDashboard" class="daily-dashboard-card">
+      <div class="daily-dashboard-head">
+        <div class="daily-streak-orb"><div class="num">${snap.streak}</div><div class="txt">${labels.days}</div></div>
+        <div class="daily-dashboard-copy"><h3>${labels.daily}</h3><p>${afaqMotivation(lang,snap.streak)}</p><span class="daily-title-pill">${ic('medal','icon-sm')} ${labels.title}: ${title}</span></div>
+      </div>
+      <div class="daily-calendar">${cal}</div>
+      <div class="daily-progress-row"><span class="muted">${labels.longest}: ${snap.longest}</span><span class="muted">${unlocked.length}/${AFAQ_BADGES[lang].length}</span></div>
+      <div class="next-reward-box">
+        <div class="daily-progress-row"><b style="font-size:13px">${labels.next}</b><span class="muted">${Math.round(next.pct)}%</span></div>
+        <p class="muted" style="margin:6px 0 8px">${next.label}</p>
+        <div class="progress-track"><div class="progress-fill" style="width:${next.pct}%"></div></div>
+      </div>
+      <div class="reward-preview-grid">${preview}</div>
+    </div>
+
+    <!-- ===== Interactive Quick-Access Hub ===== -->
+    <div class="section-heading">${labels.tools}</div>
+    <div class="home-interactive-tool-grid">
+      <div class="interactive-tool-card" onclick="go('pomodoro')">
+        <div class="tool-icon-wrap">${ic('stopwatch')}</div>
+        <h4>${labels.focus}</h4>
+        <p>${labels.focusSub}</p>
+      </div>
+      <div class="interactive-tool-card" onclick="go('water')">
+        <div class="tool-icon-wrap">${ic('droplet')}</div>
+        <h4>${labels.water}</h4>
+        <p>${labels.waterSub}</p>
+      </div>
+      <div class="interactive-tool-card" onclick="go('breathing')">
+        <div class="tool-icon-wrap">${ic('bubbles')}</div>
+        <h4>${labels.breath}</h4>
+        <p>${labels.breathSub}</p>
+      </div>
+      <div class="interactive-tool-card" onclick="go('library')">
+        <div class="tool-icon-wrap">${ic('book-open')}</div>
+        <h4>${labels.library}</h4>
+        <p>${labels.librarySub}</p>
+      </div>
+      <div class="interactive-tool-card" onclick="go('habit')">
+        <div class="tool-icon-wrap">${ic('check-circle')}</div>
+        <h4>${labels.habits}</h4>
+        <p>${labels.habitsSub}</p>
+      </div>
+      <div class="interactive-tool-card" onclick="go('gratitude')">
+        <div class="tool-icon-wrap">${ic('flower')}</div>
+        <h4>${labels.gratitude}</h4>
+        <p>${labels.gratitudeSub}</p>
+      </div>
+      <div class="interactive-tool-card" onclick="go('decision-wheel')">
+        <div class="tool-icon-wrap">${ic('dice')}</div>
+        <h4>${labels.decision}</h4>
+        <p>${labels.decisionSub}</p>
+      </div>
+      <div class="interactive-tool-card" onclick="go('challenge-7')">
+        <div class="tool-icon-wrap">${ic('target')}</div>
+        <h4>${labels.challenge}</h4>
+        <p>${labels.challengeSub}</p>
+      </div>
+    </div>
+  </div>`;
   const hero=document.querySelector('#screen-home .hero-panel'); if(!hero) return;
   const old=document.getElementById('afaqHomeUpgrade'); if(old) old.outerHTML=html; else hero.insertAdjacentHTML('afterend',html);
 }
@@ -2754,7 +3249,381 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     translateVisibleScreen();
   });
+  updateAndroidDailyReminder();
 });
+
+function afaqTriggerConfetti() {
+  const colors = ['#D4A373', '#4A6760', '#6C8981', '#E7C39B', '#D9AE83'];
+  for(let i=0; i<30; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.backgroundColor = pickRandom(colors);
+    piece.style.animationDelay = Math.random() * 0.5 + 's';
+    piece.style.transform = `scale(${Math.random() * 0.6 + 0.4})`;
+    document.body.appendChild(piece);
+    setTimeout(() => { piece.remove(); }, 2800);
+  }
+}
+
+function renderNotificationTest(){
+  const lang = currentLang();
+  const statusEl = document.getElementById('notif-permission-status');
+  if(!statusEl) return;
+
+  if(window.AfaqAndroid){
+    const enabled = window.AfaqAndroid.areNotificationsEnabled();
+    if(enabled){
+      statusEl.textContent = lang === 'ar' ? 'ممنوحة ✓ (تعمل بشكل ممتاز)' : 'Granted ✓ (Working perfectly)';
+      statusEl.style.color = '#4A6760';
+    } else {
+      statusEl.textContent = lang === 'ar' ? 'غير ممنوحة ✕ (الرجاء الضغط على طلب الصلاحية)' : 'Not Granted ✕ (Please request permission)';
+      statusEl.style.color = '#B3564B';
+    }
+  } else {
+    // Web fallback
+    if('Notification' in window){
+      if(Notification.permission === 'granted'){
+        statusEl.textContent = lang === 'ar' ? 'ممنوحة في المتصفح ✓' : 'Granted in browser ✓';
+        statusEl.style.color = '#4A6760';
+      } else if(Notification.permission === 'denied'){
+        statusEl.textContent = lang === 'ar' ? 'مرفوضة في المتصفح ✕' : 'Denied in browser ✕';
+        statusEl.style.color = '#B3564B';
+      } else {
+        statusEl.textContent = lang === 'ar' ? 'غير محددة (تحتاج طلب)' : 'Default (Needs request)';
+        statusEl.style.color = 'var(--accent)';
+      }
+    } else {
+      statusEl.textContent = lang === 'ar' ? 'غير مدعوم على هذا المتصفح' : 'Not supported on this browser';
+      statusEl.style.color = '#B3564B';
+    }
+  }
+}
+
+function requestTestPermission(){
+  const lang = currentLang();
+  if(window.AfaqAndroid){
+    window.AfaqAndroid.requestNotificationPermission();
+    // Check again after a short delay
+    setTimeout(renderNotificationTest, 2000);
+  } else if('Notification' in window){
+    Notification.requestPermission().then(() => {
+      renderNotificationTest();
+    });
+  } else {
+    showToast(lang === 'ar' ? 'الإشعارات غير مدعومة' : 'Notifications not supported');
+  }
+}
+
+function triggerImmediateNotification(){
+  const lang = currentLang();
+  const title = lang === 'ar' ? 'إشعار فوري من آفاق 🌟' : 'Immediate Afaq Notification 🌟';
+  const body = lang === 'ar' ? 'تم تشغيل الإشعار التجريبي بنجاح!' : 'Test notification triggered successfully!';
+  sendAfaqNotification(title, body);
+}
+
+function triggerDelayedNotification(){
+  const lang = currentLang();
+  const title = lang === 'ar' ? 'تذكير آفاق الذكي 🔔' : 'Afaq Smart Reminder 🔔';
+  const body = lang === 'ar' ? 'لقد مرت 10 ثوانٍ! هذا الإشعار يعمل حتى لو أغلق تطبيق آفاق.' : '10 seconds have passed! This notification works even if Afaq is closed.';
+
+  if(window.AfaqAndroid && typeof window.AfaqAndroid.scheduleNotification === 'function'){
+    window.AfaqAndroid.scheduleNotification(title, body, 10);
+    showToast(lang === 'ar' ? 'تمت جدولة الإشعار بعد 10 ثوانٍ. يمكنك إغلاق التطبيق الآن!' : 'Scheduled in 10 seconds. You can close the app now!');
+  } else {
+    // Fallback on web using setTimeout
+    setTimeout(() => {
+      sendAfaqNotification(title, body);
+    }, 10000);
+    showToast(lang === 'ar' ? 'تمت الجدولة (تنبيه: المتصفح يتطلب بقاء الصفحة مفتوحة)' : 'Scheduled (Warning: Web requires page to stay open)');
+  }
+}
+
+/* ===== Decision Wheel Logic ===== */
+let wheelOptions = [];
+let wheelAngle = 0;
+let isWheelSpinning = false;
+
+function renderDecisionWheel(){
+  const lang = currentLang();
+  const stored = getData(P+'wheel_options', lang==='ar' ? ['قراءة 10 دقائق', 'جلسة تنفس', 'ترتيب المكتب', 'شرب كوب ماء', 'مشي خفيف'] : ['Read 10 mins', 'Breathing session', 'Tidy desk', 'Drink water', 'Walk']);
+  document.getElementById('wheelOptionsInput').value = stored.join('\n');
+  wheelOptions = stored;
+  drawDecisionWheel();
+}
+
+function saveWheelOptions(){
+  const val = document.getElementById('wheelOptionsInput').value.trim();
+  if(!val){ showToast('write_something'); return; }
+  const opts = val.split('\n').map(x=>x.trim()).filter(Boolean);
+  if(opts.length < 2){ showToast(currentLang()==='ar' ? 'أدخل خيارين على الأقل' : 'Enter at least 2 options'); return; }
+  wheelOptions = opts;
+  setData(P+'wheel_options', opts);
+  drawDecisionWheel();
+  showToast(currentLang()==='ar' ? 'تم تحديث العجلة!' : 'Wheel updated!');
+}
+
+function drawDecisionWheel(){
+  const canvas = document.getElementById('decisionWheelCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const numSegments = wheelOptions.length;
+  const anglePerSegment = (Math.PI * 2) / numSegments;
+
+  ctx.clearRect(0, 0, 280, 280);
+  const cx = 140; const cy = 140; const r = 130;
+
+  const colors = ['#4A6760', '#D4A373', '#6C8981', '#E7C39B', '#324841', '#A1887F', '#A9B5AF', '#D9AE83'];
+
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(wheelAngle);
+
+  for(let i=0; i<numSegments; i++){
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, r, i * anglePerSegment, (i + 1) * anglePerSegment);
+    ctx.closePath();
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fill();
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Draw text
+    ctx.save();
+    ctx.rotate(i * anglePerSegment + anglePerSegment / 2);
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 11px Tajawal, sans-serif';
+    ctx.textAlign = 'right';
+    const text = wheelOptions[i];
+    const displayLength = 14;
+    const truncatedText = text.length > displayLength ? text.substring(0, displayLength) + '..' : text;
+    ctx.fillText(truncatedText, r - 15, 4);
+    ctx.restore();
+  }
+
+  ctx.restore();
+
+  // Center Pin
+  ctx.beginPath();
+  ctx.arc(cx, cy, 14, 0, Math.PI*2);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fill();
+  ctx.strokeStyle = 'var(--accent)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+}
+
+function spinDecisionWheel(){
+  if(isWheelSpinning) return;
+  isWheelSpinning = true;
+  document.getElementById('spinWheelBtn').disabled = true;
+
+  const numSegments = wheelOptions.length;
+  const spinAngle = Math.random() * Math.PI * 4 + Math.PI * 6;
+  let duration = 3000;
+  let start = null;
+  const initialAngle = wheelAngle;
+
+  function animate(timestamp){
+    if(!start) start = timestamp;
+    const elapsed = timestamp - start;
+    const progress = Math.min(elapsed / duration, 1);
+
+    const easeOut = 1 - Math.pow(1 - progress, 3);
+    wheelAngle = initialAngle + spinAngle * easeOut;
+    drawDecisionWheel();
+
+    if(progress < 1){
+      requestAnimationFrame(animate);
+    } else {
+      isWheelSpinning = false;
+      document.getElementById('spinWheelBtn').disabled = false;
+
+      let normalizedAngle = (wheelAngle + Math.PI/2) % (Math.PI * 2);
+      if(normalizedAngle < 0) normalizedAngle += Math.PI * 2;
+      const anglePerSegment = (Math.PI * 2) / numSegments;
+      let segmentIndex = numSegments - Math.floor(normalizedAngle / anglePerSegment) - 1;
+      if(segmentIndex < 0) segmentIndex += numSegments;
+      if(segmentIndex >= numSegments) segmentIndex = 0;
+
+      const wonOption = wheelOptions[segmentIndex];
+      reward(8);
+
+      const msg = currentLang() === 'ar'
+        ? `وقع الاختيار على: "${wonOption}" 🎉 (+8 XP)`
+        : `Selected: "${wonOption}" 🎉 (+8 XP)`;
+      showToast(msg);
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+
+/* ===== 7-Day Challenge Logic ===== */
+const CHALLENGE_7_TASKS = {
+  ar: [
+    {day: 1, title: 'يوم البدء', text: 'شرب 4 أكواب ماء والالتزام بـ 5 دقائق قراءة.'},
+    {day: 2, title: 'ترتيب الذهن', text: 'كتابة 3 أشياء أنت ممتن لها في دفتر الامتنان.'},
+    {day: 3, title: 'التركيز العميق', text: 'إتمام جلسة تركيز كاملة لمدة 25 دقيقة بدون تشتيت.'},
+    {day: 4, title: 'روتين الصباح', text: 'تطبيق الروتين الصباحي المعتمد بالكامل.'},
+    {day: 5, title: 'تنظيف المساحة', text: 'ترتيب مكان مكتبك أو غرفتك لمدة 10 دقائق متواصلة.'},
+    {day: 6, title: 'يوم بدون تشتيت', text: 'تجنب تصفح وسائل التواصل الاجتماعي لأول ساعتين من الاستيقاظ.'},
+    {day: 7, title: 'الانضباط التام', text: 'كتابة تدوينة في المفكرة وتلخيص أهم إنجازات هذا الأسبوع.'}
+  ],
+  en: [
+    {day: 1, title: 'Day of Genesis', text: 'Drink at least 4 cups of water and commit to 5 minutes of reading.'},
+    {day: 2, title: 'Mental Clarity', text: 'Log exactly 3 distinct blessings in your gratitude ledger.'},
+    {day: 3, title: 'Deep Absorption', text: 'Execute a full 25-minute focus session without a single distraction.'},
+    {day: 4, title: 'Ecosystem Routine', text: 'Perform your assigned morning routine fully.'},
+    {day: 5, title: 'Zen Space', text: 'Tidy up your physical desk space for 10 minutes straight.'},
+    {day: 6, title: 'Digital Fasting', text: 'Do not browse social media channels for the first 2 hours after waking up.'},
+    {day: 7, title: 'Total Mastery', text: 'Write a comprehensive reflection and summarize your weekly accomplishments.'}
+  ]
+};
+
+function renderChallenge7(){
+  const lang = currentLang();
+  const pool = CHALLENGE_7_TASKS[lang];
+  const completed = getData(P+'challenge7_completed', []);
+  const currentDay = completed.length + 1;
+
+  document.getElementById('challenge7ProgressTitle').textContent = lang === 'ar'
+    ? `تقدم التحدي: ${completed.length}/7 أيام`
+    : `Challenge Progress: ${completed.length}/7 Days`;
+  document.getElementById('challenge7ProgressFill').style.width = (completed.length / 7 * 100) + '%';
+
+  let gridHtml = '';
+  pool.forEach(task => {
+    const isDone = completed.includes(task.day);
+    const isLocked = task.day > currentDay;
+    const isActive = task.day === currentDay;
+
+    let actionBtn = '';
+    if(isActive){
+      actionBtn = `<button class="btn btn-gold btn-sm btn-block" style="margin-top: 10px;" onclick="completeChallenge7Day(${task.day})">${lang==='ar'?'إتمام مهمة اليوم ✓':'Complete Today Task ✓'}</button>`;
+    }
+
+    gridHtml += `
+      <div class="card" style="opacity: ${isLocked ? 0.6 : 1}; border-color: ${isActive ? 'var(--accent)' : 'var(--border)'}; background: ${isDone ? 'var(--accent-soft)' : 'var(--surface)'};">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <h4 style="margin:0; font-family: 'Cairo', sans-serif; font-size: 15px; font-weight: 800; color: var(--primary-dark);">
+            ${lang==='ar' ? `اليوم ${task.day}: ${task.title}` : `Day ${task.day}: ${task.title}`}
+          </h4>
+          <span style="font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 99px; background: ${isDone ? 'var(--primary)' : 'var(--border)'}; color: ${isDone ? '#fff' : 'var(--text-secondary)'};">
+            ${isDone ? (lang==='ar'?'مكتمل':'Completed') : (isLocked ? (lang==='ar'?'مغلق':'Locked') : (lang==='ar'?'نشط':'Active'))}
+          </span>
+        </div>
+        <p style="font-size: 13px; line-height: 1.6; color: var(--text-primary);">${task.text}</p>
+        ${actionBtn}
+      </div>
+    `;
+  });
+
+  document.getElementById('challenge7DaysGrid').innerHTML = gridHtml;
+}
+
+function completeChallenge7Day(day){
+  const completed = getData(P+'challenge7_completed', []);
+  if(completed.includes(day)) return;
+
+  completed.push(day);
+  setData(P+'challenge7_completed', completed);
+
+  reward(25);
+
+  if(day === 7){
+    showToast(currentLang()==='ar' ? '🎉 مبروك! أكملت تحدي الـ 7 أيام بالكامل وحصلت على شارة البطل!' : '🎉 Congratulations! You completed the 7-day challenge and unlocked the Hero Badge!');
+  } else {
+    showToast(currentLang()==='ar' ? `رائع! أكملت اليوم ${day} من التحدي (+25 XP)` : `Great! Completed Day ${day} of the challenge (+25 XP)`);
+  }
+
+  renderChallenge7();
+}
+
+/* ===== Habit Generator Logic ===== */
+let currentGeneratorCategory = 'health';
+let lastGeneratedHabit = null;
+
+const GENERATED_HABITS_DB = {
+  health: [
+    { name: 'شرب ماء الصباح', cue: 'فور الاستيقاظ من النوم', reward: 'علامة إنجاز وشعور بالنشاط' },
+    { name: 'التمدد الرياضي', cue: 'بعد غلي غلاية القهوة', reward: 'جسم مرن ونشط' },
+    { name: 'مشي 10 دقائق', cue: 'بعد تناول وجبة الغداء مباشرة', reward: 'هضم مريح ونشاط بالظهر' }
+  ],
+  focus: [
+    { name: 'كتابة الأولويات', cue: 'عند الجلوس على المكتب وقبل فتح المتصفح', reward: 'ذهن صافي ويوم منظم' },
+    { name: 'إبعاد الهاتف للغرفة المجاورة', cue: 'قبل البدء بأول جلسة تركيز', reward: 'إنتاجية مضاعفة وإنهاء مبكر' },
+    { name: 'مراجعة التعلم', cue: 'بعد إغلاق آخر تطبيق عمل باليوم', reward: 'شعور بالإنجاز وراحة بال' }
+  ],
+  calm: [
+    { name: 'تنفس هادئ', cue: 'فور حدوث موقف يسبب التوتر أو الضغط', reward: 'سلام داخلي وردة فعل حكيمة' },
+    { name: 'دفتر الامتنان', cue: 'عند إطفاء شاشة الهاتف للمساء', reward: 'نوم عميق وذهن متفائل' },
+    { name: 'التأمل الذاتي صامت', cue: 'فور شرب رشفة الشاي أو القهوة الأولى', reward: 'سكينة وبداية يوم راقية' }
+  ]
+};
+
+const GENERATED_HABITS_DB_EN = {
+  health: [
+    { name: 'Morning Hydration', cue: 'Right after rolling out of bed', reward: 'Instant hydration and alert brain' },
+    { name: 'Desk Stretching', cue: 'While waiting for your coffee to brew', reward: 'Relaxed shoulders and fresh back' },
+    { name: 'Post-Lunch Walk', cue: 'Right after swallowing your final bite', reward: 'Easy digestion and zero sluggishness' }
+  ],
+  focus: [
+    { name: 'Ruthless Priorities', cue: 'Sitting down at desk before opening browser', reward: 'Clear roadmap and distraction protection' },
+    { name: 'Out-Of-Sight Phone', cue: 'Before launching your first pomodoro block', reward: 'Double execution speed and early wrap-up' },
+    { name: 'Continuous Learning Log', cue: 'Closing your last work window for today', reward: 'Validation of growth and total peace' }
+  ],
+  calm: [
+    { name: 'Vagus Nerve Reset', cue: 'Instantly when an annoying notification pops up', reward: 'Lowered heart rate and conscious control' },
+    { name: 'Gratitude Ledger', cue: 'Locking your phone screens for bed', reward: 'Deeper sleep and warm optimistic mind' },
+    { name: 'Silent Coffee Sip', cue: 'Right after lifting warm mug to your lips', reward: 'Deep presence and slow start' }
+  ]
+};
+
+function selectGeneratorCategory(cat){
+  currentGeneratorCategory = cat;
+  document.querySelectorAll('#generatorCategoryChips .btn-chip').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('gen-cat-' + cat);
+  if (btn) btn.classList.add('active');
+}
+
+function generateRandomHabit(){
+  const lang = currentLang();
+  const db = lang === 'ar' ? GENERATED_HABITS_DB : GENERATED_HABITS_DB_EN;
+  const pool = db[currentGeneratorCategory];
+  const habit = pickRandom(pool);
+
+  lastGeneratedHabit = habit;
+  lastGeneratedHabit.category = currentGeneratorCategory === 'health' ? (lang==='ar'?'صحة':'Health') : (currentGeneratorCategory==='focus' ? (lang==='ar'?'تركيز':'Focus') : (lang==='ar'?'هدوء':'Calm'));
+
+  document.getElementById('genHabitName').textContent = habit.name;
+  document.getElementById('genHabitCue').textContent = habit.cue;
+  document.getElementById('genHabitAction').textContent = habit.name;
+  document.getElementById('genHabitReward').textContent = habit.reward;
+
+  document.getElementById('generatedHabitCard').style.display = 'block';
+}
+
+function addGeneratedToCustomHabits(){
+  if(!lastGeneratedHabit) return;
+  const list = getData(K.CUSTOM_HABITS, []);
+
+  if(list.some(h => h.name === lastGeneratedHabit.name)){
+    showToast('saved_already'); return;
+  }
+
+  list.push({
+    name: lastGeneratedHabit.name,
+    category: lastGeneratedHabit.category,
+    cue: lastGeneratedHabit.cue,
+    reward: lastGeneratedHabit.reward
+  });
+  setData(K.CUSTOM_HABITS, list);
+  reward(10);
+  showToast(currentLang() === 'ar' ? 'تمت إضافة العادة بنجاح لجدول لوحة العادات! (+10 XP)' : 'Habit successfully added to your list! (+10 XP)');
+}
 </script>
 </body>
 </html>
