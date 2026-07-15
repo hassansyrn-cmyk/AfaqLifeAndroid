@@ -17,6 +17,9 @@ import android.webkit.JavascriptInterface
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 
+import android.app.PendingIntent
+import android.content.Intent
+
 class AfaqAndroid(
     private val context: Context,
     private val notificationHelper: NotificationHelper
@@ -52,6 +55,115 @@ class AfaqAndroid(
     fun stopFocusTimer() {
         mainHandler.post {
             stopNativeFocusTimer()
+        }
+    }
+
+    @JavascriptInterface
+    fun scheduleNotification(title: String, body: String, delaySeconds: Int) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? android.app.AlarmManager ?: return
+        val intent = Intent(context, NotificationReceiver::class.java).apply {
+            putExtra("title", title)
+            putExtra("body", body)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            System.currentTimeMillis().toInt(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val triggerTime = System.currentTimeMillis() + (delaySeconds * 1000L)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setAndAllowWhileIdle(
+                android.app.AlarmManager.RTC_WAKEUP,
+                triggerTime,
+                pendingIntent
+            )
+        } else {
+            alarmManager.set(
+                android.app.AlarmManager.RTC_WAKEUP,
+                triggerTime,
+                pendingIntent
+            )
+        }
+    }
+
+    @JavascriptInterface
+    fun scheduleRepeatingReminder(hour: Int, minute: Int, title: String, body: String) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? android.app.AlarmManager ?: return
+        val intent = Intent(context, NotificationReceiver::class.java).apply {
+            putExtra("title", title)
+            putExtra("body", body)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            9999,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val calendar = java.util.Calendar.getInstance().apply {
+            set(java.util.Calendar.HOUR_OF_DAY, hour)
+            set(java.util.Calendar.MINUTE, minute)
+            set(java.util.Calendar.SECOND, 0)
+            set(java.util.Calendar.MILLISECOND, 0)
+            if (timeInMillis <= System.currentTimeMillis()) {
+                add(java.util.Calendar.DAY_OF_YEAR, 1)
+            }
+        }
+
+        alarmManager.setRepeating(
+            android.app.AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            android.app.AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    }
+
+    @JavascriptInterface
+    fun cancelRepeatingReminder() {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? android.app.AlarmManager ?: return
+        val intent = Intent(context, NotificationReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            9999,
+            intent,
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+        )
+        if (pendingIntent != null) {
+            alarmManager.cancel(pendingIntent)
+            pendingIntent.cancel()
+        }
+    }
+
+    @JavascriptInterface
+    fun areNotificationsEnabled(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        }
+        return true
+    }
+
+    @JavascriptInterface
+    fun requestNotificationPermission() {
+        mainHandler.post {
+            if (context is android.app.Activity) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    context.requestPermissions(
+                        arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                        1001
+                    )
+                }
+            }
+        }
+    }
+
+    @JavascriptInterface
+    fun exitApp() {
+        mainHandler.post {
+            if (context is android.app.Activity) {
+                context.finish()
+            }
         }
     }
 
