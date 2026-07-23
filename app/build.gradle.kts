@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace = "com.afaq.life"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.hassansyrn.afaqlife"
         minSdk = 23
-        targetSdk = 35
-        versionCode = 4
-        versionName = "1.0.3"
+        targetSdk = 36
+        versionCode = 5
+        versionName = "1.0.4"
     }
 
     compileOptions {
