@@ -58,8 +58,19 @@ class MainActivity : Activity() {
     }
 
     override fun onBackPressed() {
-        if (::webView.isInitialized && webView.canGoBack()) {
-            webView.goBack()
+        if (::webView.isInitialized) {
+            webView.evaluateJavascript("typeof window.onAndroidBack === 'function'") { result ->
+                val hasAndroidBack = result != null && result.trim() == "true"
+                runOnUiThread {
+                    if (hasAndroidBack) {
+                        webView.evaluateJavascript("window.onAndroidBack();", null)
+                    } else if (webView.canGoBack()) {
+                        webView.goBack()
+                    } else {
+                        super.onBackPressed()
+                    }
+                }
+            }
         } else {
             super.onBackPressed()
         }
