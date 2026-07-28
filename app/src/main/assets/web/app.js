@@ -33,7 +33,26 @@ function daily(){const s=stat();$('#daily').innerHTML=`<div class="kicker">فح�
 function activityDay(k){return !!get('mood',{})[k]||get('journal',[]).some(x=>x.key===k)||get('gratitude',[]).some(x=>x.key===k)||Object.values(get('habits',{})).some(o=>o.days?.[k])}
 function toolsScreen(){$('#tools').innerHTML=`<div class="kicker">مكتبة الأدوات</div><h1>أدوات آفاق</h1><p class="lead">أدوات يومية مستوحاة من بناء العادات، كتابة الامتنان، تنظيم الأولويات، ومراجعة التوازن.</p><div class="grid two">${tools.map(t=>toolCard(t[0])).join('')}</div>`;bind()}
 function progress(){const s=stat();$('#progress').innerHTML=`<div class="kicker">التقدم</div><h1>مؤشر تطورك</h1>${metrics(s)}<div class="card"><h3>مؤشر اليوم</h3><div class="meter"><span style="width:${s.score}%"></span></div><p class="lead" style="margin-top:10px">كل تسجيل صغير يرفع وضوحك والتزامك.</p></div><div class="grid two"><button class="tool" data-go="achievements"><div class="ico">${svg('award')}</div><strong>الشارات</strong><span>تابع إنجازاتك</span></button><button class="tool" data-go="weekly"><div class="ico">${svg('chart')}</div><strong>مراجعة أسبوعية</strong><span>اكتب درس الأسبوع</span></button></div>`;bind()}
-function settings(){$('#settings').innerHTML=`<div class="kicker">الإعدادات</div><h1>إعدادات آفاق</h1><div class="card"><h3>الثيم</h3><p class="lead">يمكنك التبديل بين الفاتح والداكن.</p><button class="btn" onclick="$('#themeBtn').click();settings()">تغيير الثيم</button></div><div class="card"><h3>التنويه القانوني</h3><p class="lead">تطبيق آفاق مخصص لتطوير نمط الحياة، التأمل الذاتي، وبناء العادات اليومية. لا يقدم التطبيق تشخيصًا طبيًا أو علاجًا نفسيًا، ولا يغني عن استشارة مختص عند الحاجة.</p></div><div class="card"><h3>الخصوصية</h3><p class="lead">لا يوجد تسجيل دخول. البيانات تُحفظ محليًا داخل المتصفح.</p><button class="btn danger" onclick="clearData()">مسح البيانات</button></div>`}
+let isPrivacyRequired = false;
+window.updatePrivacyOptionsVisibility = function(visible) {
+    isPrivacyRequired = !!visible;
+    const settingsScreenActive = stack[stack.length - 1] === 'settings';
+    if (settingsScreenActive) {
+        settings();
+    }
+};
+
+function settings(){
+    let privacyCard = '';
+    if (isPrivacyRequired) {
+        privacyCard = `<div class="card"><h3>الخصوصية والإعلانات</h3><p class="lead">تخصيص خيارات الموافقة على ملفات تعريف الارتباط والإعلانات الشخصية.</p><button class="btn" onclick="if(window.AfaqAndroid?.showPrivacyOptions) window.AfaqAndroid.showPrivacyOptions();">تعديل خيارات الخصوصية</button></div>`;
+    }
+    let debugCard = '';
+    if (window.isAfaqDebug) {
+        debugCard = `<div class="card"><h3>خيارات المطور (الاختبار)</h3><p class="lead">إعادة تعيين حالة موافقة UMP وإعادة تشغيل طلبات الموافقة.</p><button class="btn danger" onclick="if(window.AfaqAndroid?.resetConsentForTesting) { window.AfaqAndroid.resetConsentForTesting(); alert('تم إعادة ضبط الموافقة للاختبار'); }">إعادة ضبط الموافقة UMP</button></div>`;
+    }
+    $('#settings').innerHTML=`<div class="kicker">الإعدادات</div><h1>إعدادات آفاق</h1><div class="card"><h3>الثيم</h3><p class="lead">يمكنك التبديل بين الفاتح والداكن.</p><button class="btn" onclick="$('#themeBtn').click();settings()">تغيير الثيم</button></div>${privacyCard}${debugCard}<div class="card"><h3>التنويه القانوني</h3><p class="lead">تطبيق آفاق مخصص لتطوير نمط الحياة، التأمل الذاتي، وبناء العادات اليومية. لا يقدم التطبيق تشخيصًا طبيًا أو علاجًا نفسيًا، ولا يغني عن استشارة مختص عند الحاجة.</p></div><div class="card"><h3>الخصوصية</h3><p class="lead">لا يوجد تسجيل دخول. البيانات تُحفظ محليًا داخل المتصفح.</p><button class="btn danger" onclick="clearData()">مسح البيانات</button></div>`;
+}
 function clearData(){if(confirm('مسح كل البيانات المحلية؟')){Object.keys(localStorage).filter(k=>k.startsWith(KEY)).forEach(k=>localStorage.removeItem(k));toast('تم المسح');route('home',false)}}
 function tipScreen(){$('#tips').innerHTML=`<div class="kicker">نصيحة اليوم</div><h1>بطاقة يومية</h1><div class="card"><div class="ico" style="margin-bottom:12px">${svg('sparkles')}</div><h3>${currentTip}</h3></div><div class="row"><button class="btn" onclick="currentTip=tips[Math.floor(Math.random()*tips.length)];tipScreen()">نصيحة أخرى</button><button class="btn outline" onclick="saveTip()">حفظ</button></div>${notes('tips')}`}
 function saveTip(){const n=get('tips',[]);n.unshift({date:dateAr(),key:today(),text:currentTip});set('tips',n);toast('تم حفظ النصيحة');tipScreen()}

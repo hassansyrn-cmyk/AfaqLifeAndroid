@@ -23,6 +23,10 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 kotlin {
@@ -31,4 +35,5 @@ kotlin {
 
 dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
 }
