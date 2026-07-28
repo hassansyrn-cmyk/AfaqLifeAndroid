@@ -56,6 +56,18 @@ class AfaqAndroid(
     }
 
     /**
+     * Keep language synchronized in the native side for localized system-native dialogues (such as toasts).
+     */
+    @JavascriptInterface
+    fun updateLanguage(lang: String) {
+        mainHandler.post {
+            if (context is MainActivity) {
+                context.updateLanguage(lang)
+            }
+        }
+    }
+
+    /**
      * JS interface to trigger User Messaging Platform (UMP) privacy options form.
      */
     @JavascriptInterface

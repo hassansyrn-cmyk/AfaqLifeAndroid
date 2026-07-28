@@ -11,8 +11,8 @@ android {
         applicationId = "com.hassansyrn.afaqlife"
         minSdk = 23
         targetSdk = 36
-        versionCode = 7
-        versionName = "1.2"
+        versionCode = 8
+        versionName = "1.3"
     }
 
     compileOptions {
@@ -35,5 +35,6 @@ kotlin {
 
 dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.activity:activity-ktx:1.9.3")
     implementation("com.google.android.gms:play-services-ads:23.6.0")
 }

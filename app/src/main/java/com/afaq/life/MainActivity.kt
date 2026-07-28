@@ -1,7 +1,6 @@
 package com.afaq.life
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -18,13 +17,15 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 
-class MainActivity : Activity() {
+class MainActivity : ComponentActivity() {
     private lateinit var webView: WebView
     private lateinit var notificationHelper: NotificationHelper
     private lateinit var consentManager: AdConsentManager
@@ -32,6 +33,28 @@ class MainActivity : Activity() {
     private lateinit var adContainer: FrameLayout
     private var adView: AdView? = null
     private var isAdRequestInProgress = false
+
+    private var currentLanguage = "ar"
+    private var lastBackPressTime = 0L
+
+    fun updateLanguage(lang: String) {
+        currentLanguage = lang
+    }
+
+    private fun handleExitFlow() {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastBackPressTime < 2000) {
+            finish()
+        } else {
+            lastBackPressTime = currentTime
+            val msg = if (currentLanguage == "ar") {
+                "اضغط مرة أخرى للخروج"
+            } else {
+                "Press again to exit"
+            }
+            android.widget.Toast.makeText(this, msg, android.widget.Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +103,21 @@ class MainActivity : Activity() {
         mainLayout.addView(adContainer)
 
         setContentView(mainLayout)
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (::webView.isInitialized) {
+                    webView.evaluateJavascript("window.handleAndroidBackButton ? window.handleAndroidBackButton() : false") { result ->
+                        val handled = result == "true"
+                        if (!handled) {
+                            handleExitFlow()
+                        }
+                    }
+                } else {
+                    handleExitFlow()
+                }
+            }
+        })
 
         if (savedInstanceState == null) {
             webView.loadUrl(LOCAL_INDEX_URL)
@@ -222,14 +260,6 @@ class MainActivity : Activity() {
     override fun onSaveInstanceState(outState: Bundle) {
         webView.saveState(outState)
         super.onSaveInstanceState(outState)
-    }
-
-    override fun onBackPressed() {
-        if (::webView.isInitialized && webView.canGoBack()) {
-            webView.goBack()
-        } else {
-            super.onBackPressed()
-        }
     }
 
     private fun configureWebView() {

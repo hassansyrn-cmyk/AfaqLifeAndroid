@@ -139,7 +139,41 @@
   .entry-item{ border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; background:var(--surface); }
   .entry-item .date{ font-size:11px; color:var(--text-secondary); margin-bottom:4px; }
 
-  .ad-placeholder{ height:58px; border:1.5px dashed var(--border); border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; color:var(--text-secondary); font-size:12px; margin:14px 0; }
+  .more-tools-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--primary-grad);
+    color: #FFFFFF;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 16px 24px;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform .15s ease, background .15s ease;
+    width: 100%;
+    margin-top: 14px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+  }
+  .more-tools-btn:active {
+    transform: scale(0.97);
+  }
+  .more-tools-btn .icon {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    transition: transform .2s ease;
+  }
+  html[lang="ar"] .more-tools-btn .icon-arrow {
+    transform: rotate(180deg);
+  }
 
   .settings-row{ display:flex; align-items:center; justify-content:space-between; gap:10px;}
   .switch{ position:relative; width:50px; height:28px; flex-shrink:0;}
@@ -519,8 +553,6 @@
       <div class="quick-icon" style="margin:0; background:var(--gold-grad); color:#3A2A16;"><svg class="icon" viewBox="0 0 24 24"><use href="#i-trending"></use></svg></div>
       <div><h3 style="margin:0 0 3px;" data-i18n="progress_achievements">تقدمك وإنجازاتك</h3><p class="muted" style="margin:0;" data-i18n="stats_badges_one_place">إحصائياتك وشاراتك بمكان واحد</p></div>
     </div>
-
-    <div class="ad-placeholder" data-i18n="ad_placeholder">مكان إعلان لاحقًا</div>
   </div>
 
   <!-- ===== TOOLS LIST ===== -->
@@ -633,7 +665,6 @@
       <button class="btn btn-outline btn-sm" onclick="event.stopPropagation(); shareTip();" data-i18n="share">مشاركة</button>
     </div>
     <div id="savedTipsWrap"></div>
-    <div class="ad-placeholder" data-i18n="ad_placeholder">مكان إعلان لاحقًا</div>
   </div>
 
   <!-- ===== AFFIRMATIONS ===== -->
@@ -912,7 +943,6 @@
       <div class="heatmap" id="activityHeatmap"></div>
     </div>
     <button class="btn btn-outline btn-block" onclick="go('achievements')" data-i18n="view_achievements_btn">عرض الإنجازات والشارات</button>
-    <div class="ad-placeholder" data-i18n="ad_placeholder">مكان إعلان لاحقًا</div>
   </div>
 
   <!-- ===== ACHIEVEMENTS ===== -->
@@ -956,7 +986,7 @@ const I18N_DICT = {
     level: 'المستوى', streak_days: 'أيام متتالية', checkin_btn: 'تسجيل حضور اليوم', tip_of_day: 'نصيحة اليوم',
     read_more: 'اقرأ المزيد', mood_indicator: 'مؤشر اليوم', breathing_exercise: 'تمرين تنفس', water_tracking: 'شرب الماء',
     weekly_progress: 'تقدّمك هذا الأسبوع', from_habit_board: 'من لوحة العادات في تبويب "الأدوات"', progress_achievements: 'تقدمك وإنجازاتك',
-    stats_badges_one_place: 'إحصائياتك وشاراتك بمكان واحد', ad_placeholder: 'مكان إعلان لاحقًا', tools: 'الأدوات',
+    stats_badges_one_place: 'إحصائياتك وشاراتك بمكان واحد', tools: 'الأدوات',
     tools_sub: 'مجموعة أدوات لمساعدتك يومًا بعد يوم', daily_inspiration: 'الإلهام اليومي', tip_of_day_sub: 'بطاقة نصيحة يومية ملهمة',
     daily_affirmations: 'التأكيدات اليومية', daily_affirmations_sub: 'عبارات إيجابية تعزز ثقتك', micro_challenge: 'تحدي صغير',
     micro_challenge_sub: 'خطوة بسيطة تقدر تسويها الآن', self_awareness: 'الوعي الذاتي', mood_indicator_sub: 'كيف تشعر الآن؟',
@@ -1023,7 +1053,7 @@ const I18N_DICT = {
     level: 'Level', streak_days: 'Streak Days', checkin_btn: 'Log Today Attendance', tip_of_day: 'Tip of the Day',
     read_more: 'Read More', mood_indicator: 'Daily Mood', breathing_exercise: 'Breathing Exercise', water_tracking: 'Water Tracker',
     weekly_progress: 'Your Progress This Week', from_habit_board: 'From habit board in tools tab', progress_achievements: 'Progress & Achievements',
-    stats_badges_one_place: 'Your stats and badges in one place', ad_placeholder: 'Advertisement space', tools: 'Tools',
+    stats_badges_one_place: 'Your stats and badges in one place', tools: 'Tools',
     tools_sub: 'A toolkit to help you day by day', daily_inspiration: 'Daily Inspiration', tip_of_day_sub: 'An inspiring daily tip card',
     daily_affirmations: 'Daily Affirmations', daily_affirmations_sub: 'Positive phrases to boost your confidence', micro_challenge: 'Micro Challenge',
     micro_challenge_sub: 'A simple step you can do right now', self_awareness: 'Self-Awareness', mood_indicator_sub: 'How are you feeling right now?',
@@ -1244,6 +1274,10 @@ function toggleLanguage(){
   const nextLang = current === 'ar' ? 'en' : 'ar';
   setData(K.LANG, nextLang);
   
+  if (window.AfaqAndroid && typeof window.AfaqAndroid.updateLanguage === 'function') {
+    window.AfaqAndroid.updateLanguage(nextLang);
+  }
+
   // تحديث اتجاهات ومواصفات الصفحة الأساسية
   document.documentElement.lang = nextLang;
   document.documentElement.dir = nextLang === 'ar' ? 'rtl' : 'ltr';
@@ -2550,8 +2584,8 @@ function renderAfaqDailyDashboard(){
   const cal=Array.from({length:30},(_,idx)=>{ const off=29-idx, key=dateKeyOffset(off), done=!!visits[key], today=off===0; return `<div class="daily-day ${done?'done':''} ${today?'today':''}" title="${key}">${done?'':new Date(key).getDate()}</div>`; }).join('');
   const unlocked=AFAQ_BADGES[lang].filter(b=>b.check(snap));
   const preview=AFAQ_BADGES[lang].slice(0,6).map(b=>`<div class="reward-mini ${b.check(snap)?'unlocked':''}">${ic(b.icon,'icon-sm')}<div class="r-title">${b.title}</div><div class="r-desc">${b.desc}</div></div>`).join('');
-  const labels={ar:{daily:'لوحة حضورك اليومية',days:'أيام متتالية',longest:'أطول سلسلة',title:'لقبك الحالي',next:'الجائزة القادمة',tools:'أدواتك اليومية',focus:'مؤقت التركيز',water:'شرب الماء',breath:'تنفس وهدوء',library:'مكتبة آفاق العربية',focusSub:'جلسة تركيز قصيرة',waterSub:'تابع أكواب اليوم',breathSub:'دقيقة تعيد الاتزان',librarySub:'كتب وصوتيات عربية'},en:{daily:'Your daily check-in board',days:'day streak',longest:'Longest streak',title:'Current title',next:'Next reward',tools:'Your Daily Tools',focus:'Focus Timer',water:'Water',breath:'Breathing',library:'Arabic Afaq Library',focusSub:'Start a short focus session',waterSub:'Track today’s cups',breathSub:'One minute to reset',librarySub:'Arabic books and audio'}}[lang];
-  const html=`<div id="afaqHomeUpgrade"><div id="afaqDailyDashboard" class="daily-dashboard-card"><div class="daily-dashboard-head"><div class="daily-streak-orb"><div class="num">${snap.streak}</div><div class="txt">${labels.days}</div></div><div class="daily-dashboard-copy"><h3>${labels.daily}</h3><p>${afaqMotivation(lang,snap.streak)}</p><span class="daily-title-pill">${ic('medal','icon-sm')} ${labels.title}: ${title}</span></div></div><div class="daily-calendar">${cal}</div><div class="daily-progress-row"><span class="muted">${labels.longest}: ${snap.longest}</span><span class="muted">${unlocked.length}/${AFAQ_BADGES[lang].length}</span></div><div class="next-reward-box"><div class="daily-progress-row"><b style="font-size:13px">${labels.next}</b><span class="muted">${Math.round(next.pct)}%</span></div><p class="muted" style="margin:6px 0 8px">${next.label}</p><div class="progress-track"><div class="progress-fill" style="width:${next.pct}%"></div></div></div><div class="reward-preview-grid">${preview}</div></div><div class="section-heading">${labels.tools}</div><div id="afaqHomeTools" class="home-tool-grid"><div class="home-tool-card" onclick="go('pomodoro')"><div class="tool-bubble">${ic('stopwatch')}</div><div><h4>${labels.focus}</h4><p>${labels.focusSub}</p></div></div><div class="home-tool-card" onclick="go('water')"><div class="tool-bubble">${ic('droplet')}</div><div><h4>${labels.water}</h4><p>${labels.waterSub}</p></div></div><div class="home-tool-card" onclick="go('breathing')"><div class="tool-bubble">${ic('bubbles')}</div><div><h4>${labels.breath}</h4><p>${labels.breathSub}</p></div></div><div class="home-tool-card" onclick="go('library')"><div class="tool-bubble">${ic('book-open')}</div><div><h4>${labels.library}</h4><p>${labels.librarySub}</p></div></div></div></div>`;
+  const labels={ar:{daily:'لوحة حضورك اليومية',days:'أيام متتالية',longest:'أطول سلسلة',title:'لقبك الحالي',next:'الجائزة القادمة',tools:'أدواتك اليومية',focus:'مؤقت التركيز',water:'شرب الماء',breath:'تنفس وهدوء',library:'مكتبة آفاق العربية',focusSub:'جلسة تركيز قصيرة',waterSub:'تابع أكواب اليوم',breathSub:'دقيقة تعيد الاتزان',librarySub:'كتب وصوتيات عربية',moreTools:'مزيد من الأدوات'},en:{daily:'Your daily check-in board',days:'day streak',longest:'Longest streak',title:'Current title',next:'Next reward',tools:'Your Daily Tools',focus:'Focus Timer',water:'Water',breath:'Breathing',library:'Arabic Afaq Library',focusSub:'Start a short focus session',waterSub:'Track today’s cups',breathSub:'One minute to reset',librarySub:'Arabic books and audio',moreTools:'More Tools'}}[lang];
+  const html=`<div id="afaqHomeUpgrade"><div id="afaqDailyDashboard" class="daily-dashboard-card"><div class="daily-dashboard-head"><div class="daily-streak-orb"><div class="num">${snap.streak}</div><div class="txt">${labels.days}</div></div><div class="daily-dashboard-copy"><h3>${labels.daily}</h3><p>${afaqMotivation(lang,snap.streak)}</p><span class="daily-title-pill">${ic('medal','icon-sm')} ${labels.title}: ${title}</span></div></div><div class="daily-calendar">${cal}</div><div class="daily-progress-row"><span class="muted">${labels.longest}: ${snap.longest}</span><span class="muted">${unlocked.length}/${AFAQ_BADGES[lang].length}</span></div><div class="next-reward-box"><div class="daily-progress-row"><b style="font-size:13px">${labels.next}</b><span class="muted">${Math.round(next.pct)}%</span></div><p class="muted" style="margin:6px 0 8px">${next.label}</p><div class="progress-track"><div class="progress-fill" style="width:${next.pct}%"></div></div></div><div class="reward-preview-grid">${preview}</div></div><div class="section-heading">${labels.tools}</div><div id="afaqHomeTools" class="home-tool-grid"><div class="home-tool-card" onclick="go('pomodoro')"><div class="tool-bubble">${ic('stopwatch')}</div><div><h4>${labels.focus}</h4><p>${labels.focusSub}</p></div></div><div class="home-tool-card" onclick="go('water')"><div class="tool-bubble">${ic('droplet')}</div><div><h4>${labels.water}</h4><p>${labels.waterSub}</p></div></div><div class="home-tool-card" onclick="go('breathing')"><div class="tool-bubble">${ic('bubbles')}</div><div><h4>${labels.breath}</h4><p>${labels.breathSub}</p></div></div><div class="home-tool-card" onclick="go('library')"><div class="tool-bubble">${ic('book-open')}</div><div><h4>${labels.library}</h4><p>${labels.librarySub}</p></div></div></div><button class="more-tools-btn" onclick="goTab('tools')">${ic('grid4','icon-sm')} <span>${labels.moreTools}</span> <svg class="icon icon-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>`;
   const hero=document.querySelector('#screen-home .hero-panel'); if(!hero) return;
   const old=document.getElementById('afaqHomeUpgrade'); if(old) old.outerHTML=html; else hero.insertAdjacentHTML('afterend',html);
 }
@@ -2729,9 +2763,25 @@ saveSmartNotifyInterval = function(){
 };
 
 /* ===== Global Initialization Routine ===== */
+window.handleAndroidBackButton = function() {
+  const viewerOverlay = document.getElementById('afaqViewerOverlay');
+  if (viewerOverlay && viewerOverlay.classList.contains('show')) {
+    afaqCloseViewer();
+    return true;
+  }
+  if (navStack.length > 1 || navStack[0] !== 'home') {
+    goTab('home');
+    return true;
+  }
+  return false;
+};
+
 window.addEventListener('DOMContentLoaded', () => {
   // تفعيل تفضيلات اللغة المخزنة عند التحميل الفوري للموقع
   const storedLang = getData(K.LANG, 'ar');
+  if (window.AfaqAndroid && typeof window.AfaqAndroid.updateLanguage === 'function') {
+    window.AfaqAndroid.updateLanguage(storedLang);
+  }
   document.documentElement.lang = storedLang;
   document.documentElement.dir = storedLang === 'ar' ? 'rtl' : 'ltr';
   document.getElementById('langToggleBtn').textContent = storedLang === 'ar' ? 'EN' : 'AR';
