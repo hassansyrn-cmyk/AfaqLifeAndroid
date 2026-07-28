@@ -55,6 +55,30 @@ class AfaqAndroid(
         }
     }
 
+    /**
+     * JS interface to trigger User Messaging Platform (UMP) privacy options form.
+     */
+    @JavascriptInterface
+    fun showPrivacyOptions() {
+        mainHandler.post {
+            if (context is MainActivity) {
+                context.showPrivacyOptionsForm()
+            }
+        }
+    }
+
+    /**
+     * Debug-only JS interface to reset consent status and re-verify UMP flow.
+     */
+    @JavascriptInterface
+    fun resetConsentForTesting() {
+        mainHandler.post {
+            if (context is MainActivity && BuildConfig.DEBUG) {
+                context.resetConsentForTesting()
+            }
+        }
+    }
+
     private fun startNativeFocusTimer(minutes: Int) {
         stopNativeFocusTimer()
         acquireWakeLock(minutes)

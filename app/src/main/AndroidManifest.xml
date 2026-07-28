@@ -18,6 +18,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Afaq">
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7778383086464835~1748704665" />
+
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
